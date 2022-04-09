@@ -18,6 +18,7 @@
     </ClInclude>
     <ClInclude Include="src\Pixie\Window.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="src\Pixie\Application.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pixie\Console.cpp">
@@ -28,5 +29,6 @@
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Pixie\Window.cpp" />
+    <ClCompile Include="src\Pixie\Application.cpp" />
   </ItemGroup>
 </Project>

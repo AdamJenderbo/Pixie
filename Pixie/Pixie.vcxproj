@@ -93,6 +93,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Pixie.h" />
+    <ClInclude Include="src\Pixie\Application.h" />
     <ClInclude Include="src\Pixie\Console.h" />
     <ClInclude Include="src\Pixie\Main.h" />
     <ClInclude Include="src\Pixie\Time.h" />
@@ -100,6 +101,7 @@
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Pixie\Application.cpp" />
     <ClCompile Include="src\Pixie\Console.cpp" />
     <ClCompile Include="src\Pixie\Time.cpp" />
     <ClCompile Include="src\Pixie\Window.cpp" />
