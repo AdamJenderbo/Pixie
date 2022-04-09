@@ -96,10 +96,14 @@
     <ClInclude Include="src\Pixie\Console.h" />
     <ClInclude Include="src\Pixie\Main.h" />
     <ClInclude Include="src\Pixie\Time.h" />
+    <ClInclude Include="src\Pixie\Window.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pixie\Console.cpp" />
     <ClCompile Include="src\Pixie\Time.cpp" />
+    <ClCompile Include="src\Pixie\Window.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">

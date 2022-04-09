@@ -16,6 +16,8 @@
     <ClInclude Include="src\Pixie\Time.h">
       <Filter>Pixie</Filter>
     </ClInclude>
+    <ClInclude Include="src\Pixie\Window.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pixie\Console.cpp">
@@ -24,5 +26,7 @@
     <ClCompile Include="src\Pixie\Time.cpp">
       <Filter>Pixie</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\Pixie\Window.cpp" />
   </ItemGroup>
 </Project>
