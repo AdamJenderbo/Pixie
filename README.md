@@ -1,2 +1,2 @@
 # Pixie
-a 2D game engine
+A 2D game engine
