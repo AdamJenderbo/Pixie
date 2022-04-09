@@ -3,6 +3,7 @@ workspace "Pixie"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+include "Pixie/vendor/GLFW"
 
 project "Pixie"
     location "Pixie"
@@ -17,8 +18,14 @@ project "Pixie"
 
     includedirs
 	{
-		"%{prj.name}/src"
+		"%{prj.name}/src",
+        "%{prj.name}/vendor/GLFW/include"
 	}
+
+    links{
+        "GLFW",
+        "opengl32.lib"
+    }
 
     filter "configurations:Debug"
         defines { "DEBUG" }
@@ -46,6 +53,7 @@ project "Sandbox"
 	includedirs
 	{
 		"Pixie/src",
+        "Pixie/vendor/GLFW/include"
 	}
 
 	links
