@@ -24,6 +24,8 @@ namespace Pixie
 
 		virtual void SetEventCallback(std::function<void(Event&)> callback) override;
 
+		virtual void* GetNativeWindow() override { return glfwWindow; }
+
 	private:
 		GLFWwindow* glfwWindow;
 		WindowData data;

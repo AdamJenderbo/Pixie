@@ -2,7 +2,7 @@
 
 extern Pixie::Application* CreateApp();
 
-int main(void)
+int main()
 {
     Pixie::Application* app = CreateApp();
     app->Run();

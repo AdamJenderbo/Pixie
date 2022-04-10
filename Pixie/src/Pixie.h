@@ -9,3 +9,4 @@
 #include "Pixie/Application.h"
 #include "Pixie/Console.h"
 #include "Pixie/Window.h"
+#include "Pixie/Input/Input.h"

@@ -97,6 +97,9 @@
     <ClInclude Include="src\Pixie\Console.h" />
     <ClInclude Include="src\Pixie\Event\ApplicationEvent.h" />
     <ClInclude Include="src\Pixie\Event\Event.h" />
+    <ClInclude Include="src\Pixie\Input\Input.h" />
+    <ClInclude Include="src\Pixie\Input\KeyCodes.h" />
+    <ClInclude Include="src\Pixie\Input\MouseCodes.h" />
     <ClInclude Include="src\Pixie\Main.h" />
     <ClInclude Include="src\Pixie\Time.h" />
     <ClInclude Include="src\Pixie\Window.h" />
@@ -107,6 +110,7 @@
     <ClCompile Include="src\Pixie\Console.cpp" />
     <ClCompile Include="src\Pixie\Time.cpp" />
     <ClCompile Include="src\Pixie\Window.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,10 @@ namespace Pixie
 
 		void OnEvent(Event& e);
 
+		Window& GetWindow() { return *window; }
+
+		static Application& Get() { return *instance; }
+
 	protected:
 		virtual void OnUpdate() = 0;
 
@@ -23,6 +27,8 @@ namespace Pixie
 
 	private:
 		Window* window;
-		bool running;
+		bool running = false;
+
+		static Application* instance;
 	};
 }

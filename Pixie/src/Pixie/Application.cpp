@@ -5,9 +5,13 @@
 namespace Pixie
 {
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
+
+	Application* Application::instance = nullptr;
+
 	Application::Application()
-		: running(false)
 	{
+		instance = this;
+
 		window = Window::Create(640, 480, "Pixie Engine");
 		window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 	}

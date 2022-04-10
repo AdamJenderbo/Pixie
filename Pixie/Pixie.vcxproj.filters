@@ -21,6 +21,9 @@
     <ClInclude Include="src\Pixie\Application.h" />
     <ClInclude Include="src\Pixie\Event\Event.h" />
     <ClInclude Include="src\Pixie\Event\ApplicationEvent.h" />
+    <ClInclude Include="src\Pixie\Input\Input.h" />
+    <ClInclude Include="src\Pixie\Input\KeyCodes.h" />
+    <ClInclude Include="src\Pixie\Input\MouseCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pixie\Console.cpp">
@@ -32,5 +35,6 @@
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Pixie\Window.cpp" />
     <ClCompile Include="src\Pixie\Application.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
   </ItemGroup>
 </Project>

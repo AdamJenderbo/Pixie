@@ -11,6 +11,10 @@ public:
 protected:
 	virtual void OnUpdate() override
 	{
+		if (Pixie::Input::IsKeyPressed(Pixie::KeyCode::Left))
+		{
+			Pixie::Console::Log("Pressed left!");
+		}
 	}
 };
 
