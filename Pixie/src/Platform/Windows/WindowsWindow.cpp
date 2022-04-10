@@ -4,6 +4,7 @@
 
 namespace Pixie
 {
+
 	WindowsWindow::WindowsWindow(int width, int height, std::string title)
 	{
         if (!glfwInit())
@@ -19,7 +20,13 @@ namespace Pixie
 
         glfwMakeContextCurrent(glfwWindow);
 
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+        {
+            Console::LogError("Failed to initialize OpenGL context");
+        }
+
         glfwSetWindowUserPointer(glfwWindow, &data);
+
 
         glfwSetWindowCloseCallback(glfwWindow, [](GLFWwindow* window)
         {
