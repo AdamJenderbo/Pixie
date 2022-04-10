@@ -2,6 +2,7 @@
 #include "Window.h"
 #include "Event/Event.h"
 #include "Event/ApplicationEvent.h"
+#include "LayerStack.h"
 
 namespace Pixie
 {
@@ -11,6 +12,8 @@ namespace Pixie
 		Application();
 		~Application();
 
+		void PushLayer(Layer* layer);
+
 		void Run();
 
 		void OnEvent(Event& e);
@@ -19,15 +22,13 @@ namespace Pixie
 
 		static Application& Get() { return *instance; }
 
-	protected:
-		virtual void OnUpdate() = 0;
-
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
 	private:
-		Window* window;
 		bool running = false;
+		Window* window;
+		LayerStack layerStack;
 
 		static Application* instance;
 	};

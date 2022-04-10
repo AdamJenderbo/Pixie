@@ -21,12 +21,19 @@ namespace Pixie
 		delete window;
 	}
 
+	void Application::PushLayer(Layer* layer)
+	{
+		layerStack.PushLayer(layer);
+	}
+
 	void Application::Run()
 	{
 		running = true;
 		while (running)
 		{
-			OnUpdate();
+			for (Layer* layer : layerStack)
+				layer->OnUpdate();
+
 			window->OnUpdate();
 		}
 	}
@@ -34,6 +41,9 @@ namespace Pixie
 	void Application::OnEvent(Event& e)
 	{
 		Event::Handle<WindowCloseEvent>(e, BIND_EVENT_FN(OnWindowClose));
+
+		for (Layer* layer : layerStack)
+			layer->OnEvent(e);
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)

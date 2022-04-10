@@ -100,6 +100,8 @@
     <ClInclude Include="src\Pixie\Input\Input.h" />
     <ClInclude Include="src\Pixie\Input\KeyCodes.h" />
     <ClInclude Include="src\Pixie\Input\MouseCodes.h" />
+    <ClInclude Include="src\Pixie\Layer.h" />
+    <ClInclude Include="src\Pixie\LayerStack.h" />
     <ClInclude Include="src\Pixie\Main.h" />
     <ClInclude Include="src\Pixie\Time.h" />
     <ClInclude Include="src\Pixie\Window.h" />
@@ -108,6 +110,8 @@
   <ItemGroup>
     <ClCompile Include="src\Pixie\Application.cpp" />
     <ClCompile Include="src\Pixie\Console.cpp" />
+    <ClCompile Include="src\Pixie\Layer.cpp" />
+    <ClCompile Include="src\Pixie\LayerStack.cpp" />
     <ClCompile Include="src\Pixie\Time.cpp" />
     <ClCompile Include="src\Pixie\Window.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />

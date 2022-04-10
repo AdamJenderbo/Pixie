@@ -1,24 +1,22 @@
-#include "Pixie.h"
+#include "Sandbox.h"
 
-
-class Sandbox : public Pixie::Application
+Sandbox::Sandbox(std::string name)
+	: Layer(name)
 {
-public:
-	Sandbox()
-	{
-	}
+}
 
-protected:
-	virtual void OnUpdate() override
-	{
-		if (Pixie::Input::IsKeyPressed(Pixie::KeyCode::Left))
-		{
-			Pixie::Console::Log("Pressed left!");
-		}
-	}
-};
-
-Pixie::Application* CreateApp()
+void Sandbox::OnAttach()
 {
-	return new Sandbox();
+}
+
+void Sandbox::OnDetach()
+{
+}
+
+void Sandbox::OnUpdate()
+{
+}
+
+void Sandbox::OnEvent(Pixie::Event& e)
+{
 }

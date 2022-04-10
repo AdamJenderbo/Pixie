@@ -52,6 +52,8 @@
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\Pixie\Layer.h" />
+    <ClInclude Include="src\Pixie\LayerStack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pixie\Application.cpp">
@@ -72,5 +74,7 @@
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\Pixie\Layer.cpp" />
+    <ClCompile Include="src\Pixie\LayerStack.cpp" />
   </ItemGroup>
 </Project>

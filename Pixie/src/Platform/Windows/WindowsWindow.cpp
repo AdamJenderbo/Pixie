@@ -27,7 +27,6 @@ namespace Pixie
 
         glfwSetWindowUserPointer(glfwWindow, &data);
 
-
         glfwSetWindowCloseCallback(glfwWindow, [](GLFWwindow* window)
         {
             WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
