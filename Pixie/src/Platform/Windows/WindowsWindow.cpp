@@ -43,7 +43,6 @@ namespace Pixie
 
     void WindowsWindow::OnUpdate()
     {
-        glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(glfwWindow);
         glfwPollEvents();
     }

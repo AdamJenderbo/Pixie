@@ -30,6 +30,10 @@ namespace Pixie
 		Window* window;
 		LayerStack layerStack;
 
+		unsigned int vertexArray;
+		unsigned int vertexBuffer;
+		unsigned int indexBuffer;
+
 		static Application* instance;
 	};
 }
