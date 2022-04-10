@@ -1,5 +1,6 @@
 #include "WindowsWindow.h"
 #include "Pixie/Console.h"
+#include "Pixie/Event/ApplicationEvent.h"
 
 namespace Pixie
 {
@@ -17,6 +18,15 @@ namespace Pixie
         }
 
         glfwMakeContextCurrent(glfwWindow);
+
+        glfwSetWindowUserPointer(glfwWindow, &data);
+
+        glfwSetWindowCloseCallback(glfwWindow, [](GLFWwindow* window)
+        {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+            WindowCloseEvent e;
+            data.EventCallback(e);
+        });
 	}
 
 	WindowsWindow::~WindowsWindow()
@@ -25,10 +35,15 @@ namespace Pixie
         delete glfwWindow;
 	}
 
-    void WindowsWindow::Update()
+    void WindowsWindow::OnUpdate()
     {
         glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(glfwWindow);
         glfwPollEvents();
+    }
+
+    void WindowsWindow::SetEventCallback(std::function<void(Event&)> callback)
+    {
+        data.EventCallback = callback;
     }
 }

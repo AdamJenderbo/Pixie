@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "Event/Event.h"
 
 namespace Pixie
 {
@@ -8,7 +9,9 @@ namespace Pixie
 	public:
 		~Window() = default;
 
-		virtual void Update() = 0;
+		virtual void OnUpdate() = 0;
+		virtual void SetEventCallback(std::function<void(Event&)> callback) = 0;
+
 
 		static Window* Create(int width, int height, std::string title);
 

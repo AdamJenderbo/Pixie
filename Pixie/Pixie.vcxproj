@@ -95,6 +95,8 @@
     <ClInclude Include="src\Pixie.h" />
     <ClInclude Include="src\Pixie\Application.h" />
     <ClInclude Include="src\Pixie\Console.h" />
+    <ClInclude Include="src\Pixie\Event\ApplicationEvent.h" />
+    <ClInclude Include="src\Pixie\Event\Event.h" />
     <ClInclude Include="src\Pixie\Main.h" />
     <ClInclude Include="src\Pixie\Time.h" />
     <ClInclude Include="src\Pixie\Window.h" />

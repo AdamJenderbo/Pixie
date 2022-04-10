@@ -1,5 +1,7 @@
 #pragma once
 #include "Window.h"
+#include "Event/Event.h"
+#include "Event/ApplicationEvent.h"
 
 namespace Pixie
 {
@@ -11,9 +13,16 @@ namespace Pixie
 
 		void Run();
 
+		void OnEvent(Event& e);
+
 	protected:
-		virtual void Update() = 0;
+		virtual void OnUpdate() = 0;
+
+	private:
+		bool OnWindowClose(WindowCloseEvent& e);
+
 	private:
 		Window* window;
+		bool running;
 	};
 }

@@ -6,13 +6,11 @@ class Sandbox : public Pixie::Application
 public:
 	Sandbox()
 	{
-		Pixie::Console::Log("Sandbox");
 	}
 
 protected:
-	virtual void Update() override
+	virtual void OnUpdate() override
 	{
-		Pixie::Console::Log("Updating Sandbox");
 	}
 };
 

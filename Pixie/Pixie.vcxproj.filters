@@ -19,6 +19,8 @@
     <ClInclude Include="src\Pixie\Window.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Pixie\Application.h" />
+    <ClInclude Include="src\Pixie\Event\Event.h" />
+    <ClInclude Include="src\Pixie\Event\ApplicationEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pixie\Console.cpp">
