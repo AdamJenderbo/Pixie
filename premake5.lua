@@ -20,11 +20,12 @@ project "Pixie"
 
     includedirs
 	{
-		"%{prj.name}/src",
-        "%{prj.name}/vendor/GLFW/include",
-        "%{prj.name}/vendor/Glad/include",
-        "%{prj.name}/vendor/imgui",
-        "%{prj.name}/vendor/glm"
+		"Pixie/src",
+        "Pixie/vendor/GLFW/include",
+        "Pixie/vendor/Glad/include",
+        "Pixie/vendor/imgui",
+        "Pixie/vendor/glm",
+        "Pixie/vendor/entt/include"
 	}
 
     links
