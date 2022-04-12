@@ -5,6 +5,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include "Pixie/vendor/GLFW"
 include "Pixie/vendor/Glad"
+include "Pixie/vendor/imgui"
 
 project "Pixie"
     location "Pixie"
@@ -21,14 +22,17 @@ project "Pixie"
 	{
 		"%{prj.name}/src",
         "%{prj.name}/vendor/GLFW/include",
-        "%{prj.name}/vendor/Glad/include"
+        "%{prj.name}/vendor/Glad/include",
+        "%{prj.name}/vendor/imgui",
+        "%{prj.name}/vendor/glm"
 	}
 
     links
     {
         "GLFW",
         "opengl32.lib",
-        "Glad"
+        "Glad",
+        "ImGui",
     }
 
     filter "configurations:Debug"

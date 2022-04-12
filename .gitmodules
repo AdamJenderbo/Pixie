@@ -4,3 +4,9 @@
 [submodule "Pixie/vendor/GLFW"]
 	path = Pixie/vendor/GLFW
 	url = https://github.com/AdamJenderbo/glfw
+[submodule "Pixie/vendor/imgui"]
+	path = Pixie/vendor/imgui
+	url = https://github.com/AdamJenderbo/imgui
+[submodule "Pixie/vendor/glm"]
+	path = Pixie/vendor/glm
+	url = https://github.com/g-truc/glm

@@ -88,6 +88,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Sandbox.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Sandbox.cpp" />
   </ItemGroup>
@@ -95,9 +98,6 @@
     <ProjectReference Include="..\Pixie\Pixie.vcxproj">
       <Project>{A448E20D-105D-0ABF-D9DE-AD1E45B206F0}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\Sandbox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
