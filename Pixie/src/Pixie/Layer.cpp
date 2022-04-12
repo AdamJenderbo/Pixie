@@ -1,13 +1,15 @@
+#include "pxpch.h"
 #include "Layer.h"
 
-namespace Pixie
+namespace Pixie 
 {
-	Layer::Layer(std::string name)
-		: name(name)
+	Layer::Layer(const std::string& debugName)
+		: debugName(debugName)
 	{
 	}
 
 	Layer::~Layer()
 	{
+
 	}
 }

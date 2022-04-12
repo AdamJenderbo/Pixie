@@ -1,19 +1,47 @@
+#include "pxpch.h"
 #include "LayerStack.h"
+#include "Console.h"
 
-namespace Pixie
+namespace Pixie 
 {
+
+	LayerStack::LayerStack()
+	{
+		layerInsert = layers.begin();
+		Console::LogWarning("Layer");
+	}
+
 	LayerStack::~LayerStack()
 	{
 		for (Layer* layer : layers)
-		{
-			layer->OnDetach();
 			delete layer;
-		}
 	}
 
 	void LayerStack::PushLayer(Layer* layer)
 	{
-		layers.push_back(layer);
-		layer->OnAttach();
+		layerInsert = layers.emplace(layerInsert, layer);
 	}
+
+	void LayerStack::PushOverlay(Layer* overlay)
+	{
+		layers.emplace_back(overlay);
+	}
+
+	void LayerStack::PopLayer(Layer* layer)
+	{
+		auto it = std::find(layers.begin(), layers.end(), layer);
+		if (it != layers.end())
+		{
+			layers.erase(it);
+			layerInsert--;
+		}
+	}
+
+	void LayerStack::PopOverlay(Layer* overlay)
+	{
+		auto it = std::find(layers.begin(), layers.end(), overlay);
+		if (it != layers.end())
+			layers.erase(it);
+	}
+
 }

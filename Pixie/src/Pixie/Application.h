@@ -1,39 +1,52 @@
 #pragma once
-#include "Window.h"
-#include "Event/Event.h"
-#include "Event/ApplicationEvent.h"
-#include "LayerStack.h"
 
-namespace Pixie
+#include "Pixie/Base.h"
+
+#include "Pixie/Window.h"
+#include "Pixie/LayerStack.h"
+#include "Pixie/Events/Event.h"
+#include "Pixie/Events/ApplicationEvent.h"
+
+#include "Pixie/Timestep.h"
+
+#include "Pixie/ImGui/ImGuiLayer.h"
+
+
+namespace Pixie 
 {
+
 	class Application
 	{
 	public:
-		Application();
-		~Application();
-
-		void PushLayer(Layer* layer);
-
-		void Run();
+		Application(const std::string& name = "Hazel App");
+		virtual ~Application();
 
 		void OnEvent(Event& e);
 
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* layer);
+
 		Window& GetWindow() { return *window; }
 
-		static Application& Get() { return *instance; }
+		void Close();
 
+		static Application& Get() { return *instance; }
+		void Run();
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
-
+		bool OnWindowResize(WindowResizeEvent& e);
 	private:
-		bool running = false;
-		Window* window;
+		Ref<Window> window;
+		ImGuiLayer* imGuiLayer;
+		bool running = true;
+		bool minimized = false;
 		LayerStack layerStack;
-
-		unsigned int vertexArray;
-		unsigned int vertexBuffer;
-		unsigned int indexBuffer;
-
+		float lastFrameTime = 0.0f;
+	private:
 		static Application* instance;
 	};
+
+	// To be defined in CLIENT
+	Application* CreateApplication();
+
 }

@@ -1,35 +1,43 @@
 #pragma once
-#include "Pixie/Window.h"
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
-#include <string>
-#include <vector>
 
-namespace Pixie
-{
-	struct WindowData
-	{
-		int Width;
-		int Height;
-		std::string Title;
-		std::function<void(Event&)> EventCallback;
-	};
+#include "Pixie/Window.h"
+
+#include <GLFW/glfw3.h>
+
+namespace Pixie {
 
 	class WindowsWindow : public Window
 	{
 	public:
-		WindowsWindow(int width, int height, std::string title);
-		~WindowsWindow();
+		WindowsWindow(const WindowProps& props);
+		virtual ~WindowsWindow();
 
-		void OnUpdate();
+		void OnUpdate() override;
 
-		virtual void SetEventCallback(std::function<void(Event&)> callback) override;
+		inline unsigned int GetWidth() const override { return data.Width; }
+		inline unsigned int GetHeight() const override { return data.Height; }
 
-		virtual void* GetNativeWindow() override { return glfwWindow; }
-
+		// Window attributes
+		inline void SetEventCallback(const EventCallbackFn& callback) override { data.EventCallback = callback; }
+		void SetVSync(bool enabled) override;
+		bool IsVSync() const override;
+		virtual void* GetNativeWindow() const { return window; }
 	private:
-		GLFWwindow* glfwWindow;
+		virtual void Init(const WindowProps& props);
+		virtual void Shutdown();
+	private:
+		GLFWwindow* window;
+
+		struct WindowData
+		{
+			std::string Title;
+			unsigned int Width, Height;
+			bool VSync;
+
+			EventCallbackFn EventCallback;
+		};
+
 		WindowData data;
 	};
-}
 
+}

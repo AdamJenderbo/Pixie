@@ -3,7 +3,7 @@
 
 int main()
 {
-	Pixie::Application* app = new Pixie::Application();
+	Pixie::Application* app = new Pixie::Application("Sandbox");
 	app->PushLayer(new Sandbox("Sandbox"));
 	app->Run();
 	delete app;

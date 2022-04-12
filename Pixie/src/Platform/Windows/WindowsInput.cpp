@@ -1,23 +1,24 @@
+#include "pxpch.h"
 #include "Pixie/Input/Input.h"
+
+#include "Pixie/Application.h"
+#include <GLFW/glfw3.h>
 #include "Pixie/Input/KeyCodes.h"
 #include "Pixie/Input/MouseCodes.h"
-#include "Pixie/Application.h"
 
-#include <GLFW/glfw3.h>
-
-namespace Pixie
+namespace Pixie 
 {
 	bool Input::IsKeyPressed(KeyCode keycode)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-		auto state = glfwGetKey(window, (int)keycode);
+		auto state = glfwGetKey(window, (int) keycode);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
 	bool Input::IsMouseButtonPressed(MouseCode button)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-		auto state = glfwGetMouseButton(window, (int)button);
+		auto state = glfwGetMouseButton(window, (int) button);
 		return state == GLFW_PRESS;
 	}
 
@@ -26,6 +27,7 @@ namespace Pixie
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
+
 		return { (float)xpos, (float)ypos };
 	}
 

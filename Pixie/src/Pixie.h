@@ -9,7 +9,15 @@
 #include "Pixie/Application.h"
 #include "Pixie/Console.h"
 #include "Pixie/Window.h"
+#include "Pixie/Timestep.h"
 #include "Pixie/Input/Input.h"
 
 //------- Event -------------//
-#include "Pixie/Event/Event.h"
+#include "Pixie/Events/Event.h"
+
+//------- Renderer ---------//
+#include "Pixie/Renderer/Framebuffer.h"
+#include "Pixie/Renderer/OrthographicCamera.h"
+#include "Pixie/Renderer/OrthographicCameraController.h"
+#include "Pixie/Renderer/Renderer2D.h"
+#include "Pixie/Renderer/RenderCommand.h"

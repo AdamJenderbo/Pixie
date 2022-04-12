@@ -1,22 +1,25 @@
 #pragma once
-#include "Event/Event.h"
-#include <string>
 
+#include "Pixie/Base.h"
+#include "Pixie/Events/Event.h"
+#include "Pixie/Timestep.h"
 
 namespace Pixie
 {
 	class Layer
 	{
 	public:
-		Layer(std::string name);
-		~Layer();
+		Layer(const std::string& name = "Layer");
+		virtual ~Layer();
 
-		virtual void OnAttach() = 0;
-		virtual void OnDetach() = 0;
-		virtual void OnUpdate() = 0;
-		virtual void OnEvent(Event& e) = 0;
+		virtual void OnAttach() {}
+		virtual void OnDetach() {}
+		virtual void OnUpdate(Pixie::Timestep ts) {}
+		virtual void OnEvent(Event& event) {}
+		virtual void OnImGuiRender() {};
 
-	private:
-		std::string name;
+		inline const std::string& GetName() const { return debugName; }
+	protected:
+		std::string debugName;
 	};
 }

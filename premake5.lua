@@ -1,4 +1,5 @@
 workspace "Pixie"
+    architecture "x86_64"
     configurations { "Debug", "Release" }
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
@@ -16,7 +17,8 @@ project "Pixie"
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    files { "%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp" }
+	pchheader "pxpch.h"
+	pchsource "Pixie/src/pxpch.cpp"
 
     includedirs
 	{
@@ -25,8 +27,19 @@ project "Pixie"
         "Pixie/vendor/Glad/include",
         "Pixie/vendor/imgui",
         "Pixie/vendor/glm",
-        "Pixie/vendor/entt/include"
+        "Pixie/vendor/entt/include",
+        "Pixie/vendor/stb_image"
 	}
+
+    files 
+    { 
+        "Pixie/src/**.h", 
+        "Pixie/src/**.cpp",
+        "Pixie/vendor/stb_image/**.h",
+		"Pixie/vendor/stb_image/**.cpp",
+		"Pixie/vendor/glm/glm/**.hpp",
+		"Pixie/vendor/glm/glm/**.inl",
+    }
 
     links
     {
@@ -62,7 +75,8 @@ project "Sandbox"
 	includedirs
 	{
 		"Pixie/src",
-        "Pixie/vendor/GLFW/include"
+        "Pixie/vendor/GLFW/include",
+        "Pixie/vendor/glm"
 	}
 
 	links
