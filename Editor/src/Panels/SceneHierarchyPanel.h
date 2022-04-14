@@ -21,10 +21,8 @@ namespace Pixie
 		void DrawEntityNode(Entity entity);
 		void DrawComponents(Entity entity);
 
-		void DrawTag(TagComponent& tagComponent);
-		void DrawTransform(TransformComponent& transformComponent);
-		void DrawCamera(CameraComponent& cameraComponent);
-		void DrawSpriteRenderer(SpriteRendererComponent& spriteRendererComponent);
+		template<typename T>
+		void DrawComponent(Entity& entity);
 
 		static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f);
 
@@ -33,5 +31,4 @@ namespace Pixie
 		Ref<Scene> context;
 		Entity selectionContext;
 	};
-
 }

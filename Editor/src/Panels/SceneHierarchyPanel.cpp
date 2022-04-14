@@ -64,38 +64,16 @@ namespace Pixie
 
 	}
 
-	void SceneHierarchyPanel::DrawComponents(Entity entity)
+	template<typename T>
+	void SceneHierarchyPanel::DrawComponent(Entity& entity)
 	{
-		// Rendarar alla komponenter i en entitet
-
-		if (entity.HasComponent<TagComponent>())
-		{
-			auto& tagComponent = entity.GetComponent<TagComponent>();
-			DrawTag(tagComponent);
-		}
-
-		if (entity.HasComponent<TransformComponent>())
-		{
-			auto& transformComponent = entity.GetComponent<TransformComponent>();
-			DrawTransform(transformComponent);
-		}
-
-		if (entity.HasComponent<CameraComponent>())
-		{
-			auto& cameraComponent = entity.GetComponent<CameraComponent>();
-			DrawCamera(cameraComponent);
-		}
-
-		if (entity.HasComponent<SpriteRendererComponent>())
-		{
-			auto& spriteRendererComponent = entity.GetComponent<SpriteRendererComponent>();
-			DrawSpriteRenderer(spriteRendererComponent);
-		}
+		static_assert(false);
 	}
 
-	void SceneHierarchyPanel::DrawTag(TagComponent& tagComponent)
+	template<>
+	void SceneHierarchyPanel::DrawComponent<TagComponent>(Entity& entity)
 	{
-		auto& tag = tagComponent.Tag;
+		auto& tag = entity.GetComponent<TagComponent>().Tag;
 
 		char buffer[256];
 		memset(buffer, 0, sizeof(buffer)); // Allokera minne
@@ -105,24 +83,29 @@ namespace Pixie
 			tag = std::string(buffer); // Skriv ändrat värde från buffer till tag
 	}
 
-	void SceneHierarchyPanel::DrawTransform(TransformComponent& transformComponent)
+	template<>
+	void SceneHierarchyPanel::DrawComponent<TransformComponent>(Entity& entity)
 	{
+		auto transform = entity.GetComponent <TransformComponent>();
+
 		if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
-		{;
-			DrawVec3Control("Translation", transformComponent.Translation);
-			glm::vec3 rotation = glm::degrees(transformComponent.Rotation);
+		{
+			DrawVec3Control("Translation", transform.Translation);
+			glm::vec3 rotation = glm::degrees(transform.Rotation);
 			DrawVec3Control("Rotation", rotation);
-			transformComponent.Rotation = glm::radians(rotation);
-			DrawVec3Control("Scale", transformComponent.Scale, 1.0f);
+			transform.Rotation = glm::radians(rotation);
+			DrawVec3Control("Scale", transform.Scale, 1.0f);
 
 			ImGui::TreePop();
 		}
 	}
 
-	void SceneHierarchyPanel::DrawCamera(CameraComponent& cameraComponent)
+	template<>
+	void SceneHierarchyPanel::DrawComponent<CameraComponent>(Entity& entity)
 	{
 		if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
 		{
+			auto& cameraComponent = entity.GetComponent<CameraComponent>();
 			auto& camera = cameraComponent.Camera;
 
 			ImGui::Checkbox("Primary", &cameraComponent.Primary);
@@ -184,13 +167,30 @@ namespace Pixie
 		}
 	}
 
-	void SceneHierarchyPanel::DrawSpriteRenderer(SpriteRendererComponent& spriteRendererComponent)
+	template<>
+	void SceneHierarchyPanel::DrawComponent<SpriteRendererComponent>(Entity& entity)
 	{
+		auto spriteRenderer = entity.GetComponent<SpriteRendererComponent>();
 		if (ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Sprite Renderer"))
 		{
-			ImGui::ColorEdit4("Color", glm::value_ptr(spriteRendererComponent.Color));
+			ImGui::ColorEdit4("Color", glm::value_ptr(spriteRenderer.Color));
 			ImGui::TreePop();
 		}
+	}
+
+	void SceneHierarchyPanel::DrawComponents(Entity entity)
+	{
+		if (entity.HasComponent<TagComponent>())
+			DrawComponent<TagComponent>(entity);
+
+		if (entity.HasComponent<TransformComponent>())
+			DrawComponent<TransformComponent>(entity);
+
+		if (entity.HasComponent<CameraComponent>())
+			DrawComponent<CameraComponent>(entity);
+
+		if (entity.HasComponent<SpriteRendererComponent>())
+			DrawComponent<SpriteRendererComponent>(entity);
 	}
 
 	void SceneHierarchyPanel::DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue, float columnWidth)
