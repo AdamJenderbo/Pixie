@@ -150,10 +150,7 @@ namespace Pixie
 		data.TextureShader->Bind();
 		data.TextureShader->SetMat4("u_ViewProjection", viewProj);
 
-		data.QuadIndexCount = 0;
-		data.QuadVertexBufferPtr = data.QuadVertexBufferBase;
-
-		data.TextureSlotIndex = 1;
+		StartBatch();
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
@@ -161,11 +158,7 @@ namespace Pixie
 		data.TextureShader->Bind();
 		data.TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 
-		data.QuadIndexCount = 0;
-		data.QuadVertexBufferPtr = data.QuadVertexBufferBase;
-
-		data.TextureSlotIndex = 1;
-
+		StartBatch();
 	}
 
 	void Renderer2D::EndScene()
@@ -176,6 +169,14 @@ namespace Pixie
 		Flush();
 	}
 
+	void Renderer2D::StartBatch()
+	{
+		data.QuadIndexCount = 0;
+		data.QuadVertexBufferPtr = data.QuadVertexBufferBase;
+
+		data.TextureSlotIndex = 1;
+	}
+
 	void Renderer2D::Flush()
 	{
 		for (uint32_t i = 0; i < data.TextureSlotIndex; i++)
@@ -184,14 +185,10 @@ namespace Pixie
 		RenderCommand::DrawIndexed(data.QuadVertexArray, data.QuadIndexCount);
 	}
 
-	void Renderer2D::FlushAndReset()
+	void Renderer2D::NextBatch()
 	{
-		EndScene();
-
-		data.QuadIndexCount = 0;
-		data.QuadVertexBufferPtr = data.QuadVertexBufferBase;
-
-		data.TextureSlotIndex = 1;
+		Flush();
+		StartBatch();
 	}
 
 
@@ -224,7 +221,7 @@ namespace Pixie
 	void Renderer2D::DrawQuad(const glm::mat4 transform, const glm::vec4& color)
 	{
 		if (data.QuadIndexCount >= Renderer2DData::MaxIndices)
-			FlushAndReset();
+			NextBatch();
 
 		const int textureIndex = 0;
 		const float tilingFactor = 1.0f;
@@ -235,7 +232,7 @@ namespace Pixie
 	void Renderer2D::DrawQuad(const glm::mat4 transform, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
 	{
 		if (data.QuadIndexCount >= Renderer2DData::MaxIndices)
-			FlushAndReset();
+			NextBatch();
 
 		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
@@ -255,7 +252,7 @@ namespace Pixie
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
 		if (data.QuadIndexCount >= Renderer2DData::MaxIndices)
-			FlushAndReset();
+			NextBatch();
 
 		const int textureIndex = 0;
 		const float tilingFactor = 1.0f;
@@ -275,7 +272,7 @@ namespace Pixie
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
 	{
 		if (data.QuadIndexCount >= Renderer2DData::MaxIndices)
-			FlushAndReset();
+			NextBatch();
 
 		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
