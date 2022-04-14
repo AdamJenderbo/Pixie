@@ -84,6 +84,12 @@ namespace Pixie
 			auto& cameraComponent = entity.GetComponent<CameraComponent>();
 			DrawCamera(cameraComponent);
 		}
+
+		if (entity.HasComponent<SpriteRendererComponent>())
+		{
+			auto& spriteRendererComponent = entity.GetComponent<SpriteRendererComponent>();
+			DrawSpriteRenderer(spriteRendererComponent);
+		}
 	}
 
 	void SceneHierarchyPanel::DrawTag(TagComponent& tagComponent)
@@ -170,6 +176,15 @@ namespace Pixie
 			}
 
 
+			ImGui::TreePop();
+		}
+	}
+
+	void SceneHierarchyPanel::DrawSpriteRenderer(SpriteRendererComponent& spriteRendererComponent)
+	{
+		if (ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Sprite Renderer"))
+		{
+			ImGui::ColorEdit4("Color", glm::value_ptr(spriteRendererComponent.Color));
 			ImGui::TreePop();
 		}
 	}

@@ -24,6 +24,7 @@ namespace Pixie
 		void DrawTag(TagComponent& tagComponent);
 		void DrawTransform(TransformComponent& transformComponent);
 		void DrawCamera(CameraComponent& cameraComponent);
+		void DrawSpriteRenderer(SpriteRendererComponent& spriteRendererComponent);
 
 
 	private:
