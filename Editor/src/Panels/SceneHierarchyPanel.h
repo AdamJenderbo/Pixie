@@ -3,6 +3,7 @@
 #include "Pixie/Base.h"
 #include "Pixie/Scene/Scene.h"
 #include "Pixie/Scene/Entity.h"
+#include "Pixie/Scene/Components.h"
 
 namespace Pixie 
 {
@@ -18,6 +19,11 @@ namespace Pixie
 		void OnImGuiRender();
 	private:
 		void DrawEntityNode(Entity entity);
+		void DrawComponents(Entity entity);
+
+		void DrawTag(TagComponent& tagComponent);
+		void DrawTransform(TransformComponent& transformComponent);
+
 	private:
 		Ref<Scene> context;
 		Entity selectionContext;

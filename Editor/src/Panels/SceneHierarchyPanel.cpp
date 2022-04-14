@@ -3,6 +3,7 @@
 #include <imgui.h>
 
 #include "Pixie/Scene/Components.h"
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Pixie 
 {
@@ -22,10 +23,20 @@ namespace Pixie
 		ImGui::Begin("Scene Hierarchy");
 
 		context->registry.each([&](auto entityID)
-			{
-				Entity entity{ entityID , context.get() };
-				DrawEntityNode(entity);
-			});
+		{
+			Entity entity{ entityID , context.get() };
+			DrawEntityNode(entity);
+		});
+
+		// Om man klickar utanför entitet, deselecta nuvarande entitet
+		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+			selectionContext = {};
+
+		ImGui::End();
+
+		ImGui::Begin("Properties");
+		if (selectionContext)
+			DrawComponents(selectionContext);
 
 		ImGui::End();
 	}
@@ -36,10 +47,10 @@ namespace Pixie
 
 		ImGuiTreeNodeFlags flags = ((selectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
+
+		// Om man klickar på en entity, selecta den
 		if (ImGui::IsItemClicked())
-		{
 			selectionContext = entity;
-		}
 
 		if (opened)
 		{
@@ -50,6 +61,46 @@ namespace Pixie
 			ImGui::TreePop();
 		}
 
+	}
+
+	void SceneHierarchyPanel::DrawComponents(Entity entity)
+	{
+		// Rendarar alla komponenter i en entitet
+
+		if (entity.HasComponent<TagComponent>())
+		{
+			auto& tagComponent = entity.GetComponent<TagComponent>();
+			DrawTag(tagComponent);
+		}
+
+		if (entity.HasComponent<TransformComponent>())
+		{
+			auto& transformComponent = entity.GetComponent<TransformComponent>();
+			DrawTransform(transformComponent);
+		}
+	}
+
+	void SceneHierarchyPanel::DrawTag(TagComponent& tagComponent)
+	{
+		auto& tag = tagComponent.Tag;
+
+		char buffer[256];
+		memset(buffer, 0, sizeof(buffer)); // Allokera minne
+		strcpy_s(buffer, sizeof(buffer), tag.c_str()); // Kopiera tag till buffer
+
+		if (ImGui::InputText("Tag", buffer, sizeof(buffer)))
+			tag = std::string(buffer); // Skriv ändrat värde från buffer till tag
+	}
+
+	void SceneHierarchyPanel::DrawTransform(TransformComponent& transformComponent)
+	{
+		if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
+		{
+			auto& transform = transformComponent.Transform;
+			ImGui::DragFloat3("Position", glm::value_ptr(transform[3]), 0.1f);
+
+			ImGui::TreePop();
+		}
 	}
 
 }
