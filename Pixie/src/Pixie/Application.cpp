@@ -20,8 +20,8 @@ namespace Pixie
 
 		Renderer::Init();
 
-		//imGuiLayer = new ImGuiLayer();
-		//PushOverlay(imGuiLayer);
+		imGuiLayer = new ImGuiLayer();
+		PushOverlay(imGuiLayer);
 	}
 
 
@@ -39,9 +39,22 @@ namespace Pixie
 
 			for (Layer* layer : layerStack)
 				layer->OnUpdate(timestep);
+
+
+			imGuiLayer->Begin();
+			for (Layer* layer : layerStack)
+				layer->OnImGuiRender();
+			imGuiLayer->End();
+
+
 			window->OnUpdate();
 
 		};
+	}
+
+	void Application::Close()
+	{
+		running = false;
 	}
 
 	void Application::PushLayer(Layer* layer)
@@ -73,5 +86,20 @@ namespace Pixie
 	{
 		running = false;
 		return true;
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		{
+			minimized = true;
+			return false;
+		}
+
+		minimized = false;
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+
+		return false;
 	}
 }

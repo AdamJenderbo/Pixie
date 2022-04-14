@@ -76,7 +76,8 @@ project "Sandbox"
 	{
 		"Pixie/src",
         "Pixie/vendor/GLFW/include",
-        "Pixie/vendor/glm"
+        "Pixie/vendor/glm",
+        "Pixie/vendor/imgui"
 	}
 
 	links
@@ -91,3 +92,41 @@ project "Sandbox"
     filter "configurations:Release"
         defines { "RELEASE" }
         optimize "On"
+
+project "Editor"
+    location "Editor"
+    kind "ConsoleApp" 
+    language "C++"
+    cppdialect "C++17"
+
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    files
+    {
+        "%{prj.name}/src/**.h",
+        "%{prj.name}/src/**.cpp"
+    }
+
+    includedirs
+    {
+        "Pixie/src",
+        "Pixie/vendor/GLFW/include",
+        "Pixie/vendor/glm",
+        "Pixie/vendor/imgui",
+        "Pixie/vendor/entt/include"
+    }
+
+    links
+    {
+        "Pixie"
+    }
+
+    filter "configurations:Debug"
+        defines { "DEBUG" }
+        symbols "On"
+
+    filter "configurations:Release"
+        defines { "RELEASE" }
+        optimize "On"
+    

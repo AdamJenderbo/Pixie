@@ -30,6 +30,8 @@ namespace Pixie
 
 		void Close();
 
+		ImGuiLayer* GetImGuiLayer() { return imGuiLayer; }
+
 		static Application& Get() { return *instance; }
 		void Run();
 	private:

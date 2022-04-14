@@ -10,7 +10,7 @@ namespace Pixie
 	class LayerStack
 	{
 	public:
-		LayerStack();
+		LayerStack() = default;
 		~LayerStack();
 
 		void PushLayer(Layer* layer);
@@ -22,6 +22,6 @@ namespace Pixie
 		std::vector<Layer*>::iterator end() { return layers.end(); }
 	private:
 		std::vector<Layer*> layers;
-		std::vector<Layer*>::iterator layerInsert;
+		unsigned int layerInsertIndex = 0;
 	};
 }
