@@ -23,6 +23,8 @@ namespace Pixie
 
 		void DrawTag(TagComponent& tagComponent);
 		void DrawTransform(TransformComponent& transformComponent);
+		void DrawCamera(CameraComponent& cameraComponent);
+
 
 	private:
 		Ref<Scene> context;

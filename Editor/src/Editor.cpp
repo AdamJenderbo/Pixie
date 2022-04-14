@@ -26,18 +26,14 @@ namespace Pixie
 
 		activeScene = std::make_shared<Scene>();;
 
-		auto entity = activeScene->CreateEntity("Green Square");
-		entity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+		auto greenSquare = activeScene->CreateEntity("Green Square");
+		greenSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
 
-		greenSquare = entity;
+		auto redSquare = activeScene->CreateEntity("Red Square");
+		redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
 
-		camera = activeScene->CreateEntity("Camera Entity");
+		camera = activeScene->CreateEntity("Camera");
 		camera.AddComponent<CameraComponent>();
-
-		secondaryCamera = activeScene->CreateEntity("Clip-Space Entity");
-		auto& cc = secondaryCamera.AddComponent<CameraComponent>();
-		cc.Primary = false;
-
 
 		class CameraController : public ScriptableEntity
 		{
@@ -169,36 +165,6 @@ namespace Pixie
 		}
 
 		sceneHierarchyPanel.OnImGuiRender();
-
-		ImGui::Begin("Inspector");
-
-		if (greenSquare)
-		{
-			ImGui::Separator();
-			auto& tag = greenSquare.GetComponent<TagComponent>().Tag;
-			ImGui::Text("%s", tag.c_str());
-
-			auto& squareColor = greenSquare.GetComponent<SpriteRendererComponent>().Color;
-			ImGui::Separator();
-		}
-
-		ImGui::DragFloat3("Camera Transform",
-			glm::value_ptr(camera.GetComponent<TransformComponent>().Transform[3]));
-
-		if (ImGui::Checkbox("Camera A", &primaryCamera))
-		{
-			camera.GetComponent<CameraComponent>().Primary = primaryCamera;
-			secondaryCamera.GetComponent<CameraComponent>().Primary = !primaryCamera;
-		}
-
-		{
-			auto& camera = secondaryCamera.GetComponent<CameraComponent>().Camera;
-			float orthoSize = camera.GetOrthographicSize();
-			if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
-				camera.SetOrthographicSize(orthoSize);
-		}
-
-		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Scene");
