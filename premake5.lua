@@ -7,12 +7,14 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 include "Pixie/vendor/GLFW"
 include "Pixie/vendor/Glad"
 include "Pixie/vendor/imgui"
+include "Pixie/vendor/yaml"
 
 project "Pixie"
     location "Pixie"
     kind "StaticLib" 
     language "C++"
     cppdialect "C++17"
+    staticruntime "off"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -28,7 +30,8 @@ project "Pixie"
         "Pixie/vendor/imgui",
         "Pixie/vendor/glm",
         "Pixie/vendor/entt/include",
-        "Pixie/vendor/stb_image"
+        "Pixie/vendor/stb_image",
+        "Pixie/vendor/yaml/include"
 	}
 
     files 
@@ -38,7 +41,7 @@ project "Pixie"
         "Pixie/vendor/stb_image/**.h",
 		"Pixie/vendor/stb_image/**.cpp",
 		"Pixie/vendor/glm/glm/**.hpp",
-		"Pixie/vendor/glm/glm/**.inl",
+		"Pixie/vendor/glm/glm/**.inl"
     }
 
     links
@@ -47,14 +50,22 @@ project "Pixie"
         "opengl32.lib",
         "Glad",
         "ImGui",
+        "yaml"
+    }
+
+    defines 
+    {
+        "YAML_CPP_STATIC_DEFINE"
     }
 
     filter "configurations:Debug"
         defines { "DEBUG" }
+        runtime "Debug"
         symbols "On"
 
     filter "configurations:Release"
         defines { "RELEASE" }
+        runtime "Release"
         optimize "On"
 
 project "Sandbox"
@@ -62,6 +73,7 @@ project "Sandbox"
     kind "ConsoleApp" 
     language "C++"
     cppdialect "C++17"
+    staticruntime "off"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -87,10 +99,12 @@ project "Sandbox"
 
     filter "configurations:Debug"
         defines { "DEBUG" }
+        runtime "Debug"
         symbols "On"
 
     filter "configurations:Release"
         defines { "RELEASE" }
+        runtime "Release"
         optimize "On"
 
 project "Editor"
@@ -98,6 +112,7 @@ project "Editor"
     kind "ConsoleApp" 
     language "C++"
     cppdialect "C++17"
+    staticruntime "off"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -114,7 +129,8 @@ project "Editor"
         "Pixie/vendor/GLFW/include",
         "Pixie/vendor/glm",
         "Pixie/vendor/imgui",
-        "Pixie/vendor/entt/include"
+        "Pixie/vendor/entt/include",
+        "Pixie/vendor/yaml/include"
     }
 
     links
@@ -124,9 +140,11 @@ project "Editor"
 
     filter "configurations:Debug"
         defines { "DEBUG" }
+        runtime "Debug"
         symbols "On"
 
     filter "configurations:Release"
         defines { "RELEASE" }
+        runtime "Release"
         optimize "On"
     

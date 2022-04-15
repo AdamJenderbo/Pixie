@@ -153,8 +153,14 @@
     <ClInclude Include="src\Pixie\Scene\SceneCamera.h">
       <Filter>src\Pixie\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Pixie\Scene\SceneSerializer.h">
+      <Filter>src\Pixie\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\Pixie\Scene\ScriptableEntity.h">
       <Filter>src\Pixie\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pixie\TestYaml.h">
+      <Filter>src\Pixie</Filter>
     </ClInclude>
     <ClInclude Include="src\Pixie\Time.h">
       <Filter>src\Pixie</Filter>
@@ -1504,6 +1510,12 @@
     </ClCompile>
     <ClCompile Include="src\Pixie\Scene\SceneCamera.cpp">
       <Filter>src\Pixie\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pixie\Scene\SceneSerializer.cpp">
+      <Filter>src\Pixie\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pixie\TestYaml.cpp">
+      <Filter>src\Pixie</Filter>
     </ClCompile>
     <ClCompile Include="src\Pixie\Time.cpp">
       <Filter>src\Pixie</Filter>

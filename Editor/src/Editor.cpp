@@ -1,10 +1,13 @@
 #include "Editor.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include "Pixie/Scene/Components.h"
+#include "Pixie/Scene/SceneSerializer.h"
 
 #include <imgui.h>
+
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 
 namespace Pixie
 {
@@ -16,7 +19,6 @@ namespace Pixie
 
 	void Editor::OnAttach()
 	{
-
 		texture = Texture2D::Create("assets/textures/mario.png");
 
 		FramebufferSpecification fbSpec;
@@ -26,11 +28,11 @@ namespace Pixie
 
 		activeScene = std::make_shared<Scene>();;
 
-		auto greenSquare = activeScene->CreateEntity("Green Square");
-		greenSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+		//auto greenSquare = activeScene->CreateEntity("Green Square");
+		//greenSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
 
-		auto redSquare = activeScene->CreateEntity("Red Square");
-		redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
+		//auto redSquare = activeScene->CreateEntity("Red Square");
+		//redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
 
 		camera = activeScene->CreateEntity("Camera");
 		camera.AddComponent<CameraComponent>();
@@ -159,6 +161,18 @@ namespace Pixie
 				// Disabling fullscreen would allow the window to be moved to the front of other windows, 
 				// which we can't undo at the moment without finer window depth/z control.
 				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
+
+				if (ImGui::MenuItem("Serialize"))
+				{
+					SceneSerializer serializer(activeScene);
+					serializer.Serialize("assets/scenes/Example.pixie");
+				}
+
+				if (ImGui::MenuItem("Deserialize"))
+				{
+					SceneSerializer serializer(activeScene);
+					serializer.Deserialize("assets/scenes/Example.pixie");
+				}
 
 				if (ImGui::MenuItem("Exit")) Application::Get().Close();
 				ImGui::EndMenu();
