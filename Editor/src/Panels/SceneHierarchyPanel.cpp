@@ -157,13 +157,21 @@ namespace Pixie
 		{
 			if (ImGui::MenuItem("Camera"))
 			{
-				selectedEntity.AddComponent<CameraComponent>();
+				if (!selectedEntity.HasComponent<CameraComponent>())
+					selectedEntity.AddComponent<CameraComponent>();
+				else
+					Console::LogWarning("Entity already has the Camera Component");
+
 				ImGui::CloseCurrentPopup();
 			}
 
 			if (ImGui::MenuItem("Sprite Renderer"))
 			{
-				selectedEntity.AddComponent<SpriteRendererComponent>();
+				if (!selectedEntity.HasComponent<SpriteRendererComponent>())
+					selectedEntity.AddComponent<SpriteRendererComponent>();
+				else
+					Console::LogWarning("Entity already has the Sprite Renderer Component");
+
 				ImGui::CloseCurrentPopup();
 			}
 
