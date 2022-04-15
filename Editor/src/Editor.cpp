@@ -40,8 +40,6 @@ namespace Pixie
 		public:
 			virtual void OnCreate() override
 			{
-				auto& translation = GetComponent<TransformComponent>().Translation;
-				translation.x = rand() % 10 - 5.0f;
 			}
 
 			virtual void OnDestroy() override
@@ -54,13 +52,13 @@ namespace Pixie
 				float speed = 5.0f;
 
 				if (Input::IsKeyPressed(KeyCode::A))
-					translation -= speed * ts;
+					translation.x -= speed * ts;
 				if (Input::IsKeyPressed(KeyCode::D))
-					translation += speed * ts;
+					translation.x += speed * ts;
 				if (Input::IsKeyPressed(KeyCode::W))
-					translation += speed * ts;
+					translation.y += speed * ts;
 				if (Input::IsKeyPressed(KeyCode::S))
-					translation -= speed * ts;
+					translation.y -= speed * ts;
 			}
 		};
 

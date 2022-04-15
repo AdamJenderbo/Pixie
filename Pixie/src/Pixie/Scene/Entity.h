@@ -18,7 +18,9 @@ namespace Pixie
 		{
 			if(HasComponent<T>()) 
 				Console::LogError("Entity already has component!");
-			return scene->registry.emplace<T>(entityHandle, std::forward<Args>(args)...);
+			T& component = scene->registry.emplace<T>(entityHandle, std::forward<Args>(args)...);
+			scene->OnComponentAdded<T>(*this, component);
+			return component;
 		}
 
 		template<typename T>
@@ -45,6 +47,7 @@ namespace Pixie
 		int GetHandle() { return (int) entityHandle; }
 
 		operator bool() const { return entityHandle != entt::null; }
+		operator entt::entity() const { return entityHandle; }
 		operator uint32_t() const { return (uint32_t)entityHandle; }
 
 		bool operator==(const Entity& other) const

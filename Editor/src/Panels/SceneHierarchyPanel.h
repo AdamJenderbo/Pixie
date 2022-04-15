@@ -21,14 +21,11 @@ namespace Pixie
 		void DrawEntityNode(Entity entity);
 		void DrawComponents(Entity entity);
 
-		template<typename T>
-		void DrawComponent(Entity& entity);
-
 		static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f);
 
 
 	private:
-		Ref<Scene> context;
-		Entity selectionContext;
+		Ref<Scene> scene;
+		Entity selectedEntity;
 	};
 }
