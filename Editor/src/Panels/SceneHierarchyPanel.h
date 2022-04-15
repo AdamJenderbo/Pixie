@@ -14,7 +14,7 @@ namespace Pixie
 		SceneHierarchyPanel() = default;
 		SceneHierarchyPanel(const Ref<Scene>& scene);
 
-		void SetContext(const Ref<Scene>& scene);
+		void SetScene(const Ref<Scene>& scene);
 
 		void OnImGuiRender();
 	private:

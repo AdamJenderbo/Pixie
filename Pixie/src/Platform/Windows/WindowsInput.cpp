@@ -1,10 +1,8 @@
 #include "pxpch.h"
-#include "Pixie/Input/Input.h"
+#include "Pixie/Input.h"
 
 #include "Pixie/Application.h"
 #include <GLFW/glfw3.h>
-#include "Pixie/Input/KeyCodes.h"
-#include "Pixie/Input/MouseCodes.h"
 
 namespace Pixie 
 {

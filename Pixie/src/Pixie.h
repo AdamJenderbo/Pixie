@@ -10,7 +10,7 @@
 #include "Pixie/Console.h"
 #include "Pixie/Window.h"
 #include "Pixie/Timestep.h"
-#include "Pixie/Input/Input.h"
+#include "Pixie/Input.h"
 
 //------- Event -------------//
 #include "Pixie/Events/Event.h"

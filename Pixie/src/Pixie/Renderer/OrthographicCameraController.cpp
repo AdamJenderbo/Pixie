@@ -1,8 +1,8 @@
 #include "pxpch.h"
 #include "OrthographicCameraController.h"
 
-#include "Pixie/Input/Input.h"
-#include "Pixie/Input/KeyCodes.h"
+#include "Pixie/Input.h"
+#include "Pixie/KeyCodes.h"
 
 namespace Pixie 
 {
@@ -14,21 +14,21 @@ namespace Pixie
 
 	void OrthographicCameraController::OnUpdate(Timestep ts)
 	{
-		if (Input::IsKeyPressed(KeyCode::A))
+		if (Input::IsKeyPressed(Key::A))
 			cameraPosition.x -= cameraTranslationSpeed * ts;
-		else if (Input::IsKeyPressed(KeyCode::D))
+		else if (Input::IsKeyPressed(Key::D))
 			cameraPosition.x += cameraTranslationSpeed * ts;
 
-		if (Input::IsKeyPressed(KeyCode::W))
+		if (Input::IsKeyPressed(Key::W))
 			cameraPosition.y += cameraTranslationSpeed * ts;
-		else if (Input::IsKeyPressed(KeyCode::S))
+		else if (Input::IsKeyPressed(Key::S))
 			cameraPosition.y -= cameraTranslationSpeed * ts;
 
 		if (rotation)
 		{
-			if (Input::IsKeyPressed(KeyCode::Q))
+			if (Input::IsKeyPressed(Key::Q))
 				cameraRotation += cameraRotationSpeed * ts;
-			if (Input::IsKeyPressed(KeyCode::E))
+			if (Input::IsKeyPressed(Key::E))
 				cameraRotation -= cameraRotationSpeed * ts;
 
 			camera.SetRotation(cameraRotation);

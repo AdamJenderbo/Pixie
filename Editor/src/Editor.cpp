@@ -8,6 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Pixie/Utils/PlatformUtils.h"
 
 namespace Pixie
 {
@@ -53,20 +54,20 @@ namespace Pixie
 				auto& translation = GetComponent<TransformComponent>().Translation;
 				float speed = 5.0f;
 
-				if (Input::IsKeyPressed(KeyCode::A))
+				if (Input::IsKeyPressed(Key::A))
 					translation.x -= speed * ts;
-				if (Input::IsKeyPressed(KeyCode::D))
+				if (Input::IsKeyPressed(Key::D))
 					translation.x += speed * ts;
-				if (Input::IsKeyPressed(KeyCode::W))
+				if (Input::IsKeyPressed(Key::W))
 					translation.y += speed * ts;
-				if (Input::IsKeyPressed(KeyCode::S))
+				if (Input::IsKeyPressed(Key::S))
 					translation.y -= speed * ts;
 			}
 		};
 
 		camera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
-		sceneHierarchyPanel.SetContext(activeScene);
+		sceneHierarchyPanel.SetScene(activeScene);
 	}
 
 	void Editor::OnDetach()
@@ -162,17 +163,14 @@ namespace Pixie
 				// which we can't undo at the moment without finer window depth/z control.
 				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
 
-				if (ImGui::MenuItem("Serialize"))
-				{
-					SceneSerializer serializer(activeScene);
-					serializer.Serialize("assets/scenes/Example.pixie");
-				}
+				if (ImGui::MenuItem("New", "Ctrl+N"))
+					NewScene();
 
-				if (ImGui::MenuItem("Deserialize"))
-				{
-					SceneSerializer serializer(activeScene);
-					serializer.Deserialize("assets/scenes/Example.pixie");
-				}
+				if (ImGui::MenuItem("Open...", "Ctrl+O"))
+					OpenScene();
+
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+					SaveSceneAs();
 
 				if (ImGui::MenuItem("Exit")) Application::Get().Close();
 				ImGui::EndMenu();
@@ -204,6 +202,73 @@ namespace Pixie
 	void Editor::OnEvent(Event& e)
 	{
 		cameraController.OnEvent(e);
+
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(PX_BIND_EVENT_FN(Editor::OnKeyPressed));
 	}
 
+	bool Editor::OnKeyPressed(KeyPressedEvent& e)
+	{
+		// Shortcuts
+		if (e.GetRepeatCount() > 0)
+			return false;
+
+		bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
+		bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
+		switch (e.GetKeyCode())
+		{
+		case Key::N:
+		{
+			if (control)
+				NewScene();
+
+			break;
+		}
+		case Key::O:
+		{
+			if (control)
+				OpenScene();
+
+			break;
+		}
+		case Key::S:
+		{
+			if (control && shift)
+				SaveSceneAs();
+
+			break;
+		}
+		}
+	}
+
+	void Editor::NewScene()
+	{
+		activeScene = std::make_shared<Scene>();
+		activeScene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+		sceneHierarchyPanel.SetScene(activeScene);
+	}
+
+	void Editor::OpenScene()
+	{
+		std::string filepath = FileDialogs::OpenFile("Pixie Scene (*.pixie)\0*.pixie\0");
+		if (!filepath.empty())
+		{
+			activeScene = std::make_shared<Scene>();
+			activeScene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+			sceneHierarchyPanel.SetScene(activeScene);
+
+			SceneSerializer serializer(activeScene);
+			serializer.Deserialize(filepath);
+		}
+	}
+
+	void Editor::SaveSceneAs()
+	{
+		std::string filepath = FileDialogs::SaveFile("Pixie Scene (*.pixie)\0*.pixie\0");
+		if (!filepath.empty())
+		{
+			SceneSerializer serializer(activeScene);
+			serializer.Serialize(filepath);
+		}
+	}
 }

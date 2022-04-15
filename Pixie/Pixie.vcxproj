@@ -105,9 +105,9 @@
     <ClInclude Include="src\Pixie\Events\KeyEvent.h" />
     <ClInclude Include="src\Pixie\Events\MouseEvent.h" />
     <ClInclude Include="src\Pixie\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\Pixie\Input\Input.h" />
-    <ClInclude Include="src\Pixie\Input\KeyCodes.h" />
-    <ClInclude Include="src\Pixie\Input\MouseCodes.h" />
+    <ClInclude Include="src\Pixie\Input.h" />
+    <ClInclude Include="src\Pixie\KeyCodes.h" />
+    <ClInclude Include="src\Pixie\MouseCodes.h" />
     <ClInclude Include="src\Pixie\Layer.h" />
     <ClInclude Include="src\Pixie\LayerStack.h" />
     <ClInclude Include="src\Pixie\Main.h" />
@@ -133,6 +133,7 @@
     <ClInclude Include="src\Pixie\TestYaml.h" />
     <ClInclude Include="src\Pixie\Time.h" />
     <ClInclude Include="src\Pixie\Timestep.h" />
+    <ClInclude Include="src\Pixie\Utils\PlatformUtils.h" />
     <ClInclude Include="src\Pixie\Window.h" />
     <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
@@ -594,6 +595,7 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\pxpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

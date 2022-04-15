@@ -9,14 +9,15 @@
 namespace Pixie 
 {
 
-	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& context)
+	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& scene)
 	{
-		SetContext(context);
+		SetScene(scene);
 	}
 
-	void SceneHierarchyPanel::SetContext(const Ref<Scene>& context)
+	void SceneHierarchyPanel::SetScene(const Ref<Scene>& scene)
 	{
-		this->scene = context;
+		this->scene = scene;
+		selectedEntity = {};
 	}
 
 	void SceneHierarchyPanel::OnImGuiRender()
