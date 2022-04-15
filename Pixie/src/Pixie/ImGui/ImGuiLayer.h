@@ -23,6 +23,8 @@ namespace Pixie
 		void End();
 
 		void BlockEvents(bool block) { blockEvents = block; }
+
+		void SetDarkThemeColors();
 	private:
 		bool blockEvents = true;
 		float time = 0.0f;
