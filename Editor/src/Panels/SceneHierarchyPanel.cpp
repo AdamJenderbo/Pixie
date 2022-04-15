@@ -6,6 +6,10 @@
 #include "Pixie/Scene/Components.h"
 #include <glm/gtc/type_ptr.hpp>
 
+#ifdef _MSVC_LANG
+	#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 namespace Pixie 
 {
 
@@ -140,7 +144,7 @@ namespace Pixie
 
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
-			strcpy_s(buffer, sizeof(buffer), tag.c_str());
+			std::strncpy(buffer, tag.c_str(), sizeof(buffer));
 			if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
 			{
 				tag = std::string(buffer);
