@@ -2,7 +2,8 @@
 
 #include "Texture.h"
 #include "OrthographicCamera.h"
-#include "Pixie/Renderer/Camera.h"
+#include "Camera.h"
+#include "EditorCamera.h"
 
 
 namespace Pixie 
@@ -15,6 +16,7 @@ namespace Pixie
 		static void Shutdown();
 
 		static void BeginScene(const Camera& camera, const glm::mat4& transform);
+		static void BeginScene(const EditorCamera& camera);
 		static void BeginScene(const OrthographicCamera& camera); // TODO: Remove
 		static void EndScene();
 		static void Flush();

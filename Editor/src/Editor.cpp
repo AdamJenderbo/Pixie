@@ -19,58 +19,20 @@ namespace Pixie
 {
 
 	Editor::Editor()
-		: Layer("EditorLayer"), cameraController(1280.0f / 720.0f)
+		: Layer("EditorLayer")
 	{
 	}
 
 	void Editor::OnAttach()
 	{
-		texture = Texture2D::Create("assets/textures/mario.png");
-
 		FramebufferSpecification fbSpec;
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		framebuffer = Framebuffer::Create(fbSpec);
 
-		activeScene = std::make_shared<Scene>();;
+		activeScene = std::make_shared<Scene>();
 
-		//auto greenSquare = activeScene->CreateEntity("Green Square");
-		//greenSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
-
-		//auto redSquare = activeScene->CreateEntity("Red Square");
-		//redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
-
-		camera = activeScene->CreateEntity("Camera");
-		camera.AddComponent<CameraComponent>();
-
-		class CameraController : public ScriptableEntity
-		{
-		public:
-			virtual void OnCreate() override
-			{
-			}
-
-			virtual void OnDestroy() override
-			{
-			}
-
-			virtual void OnUpdate(Timestep ts) override
-			{
-				auto& translation = GetComponent<TransformComponent>().Translation;
-				float speed = 5.0f;
-
-				if (Input::IsKeyPressed(Key::J))
-					translation.x -= speed * ts;
-				if (Input::IsKeyPressed(Key::L))
-					translation.x += speed * ts;
-				if (Input::IsKeyPressed(Key::I))
-					translation.y += speed * ts;
-				if (Input::IsKeyPressed(Key::K))
-					translation.y -= speed * ts;
-			}
-		};
-
-		camera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+		editorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
 		sceneHierarchyPanel.SetScene(activeScene);
 	}
@@ -88,22 +50,18 @@ namespace Pixie
 			(spec.Width != viewportSize.x || spec.Height != viewportSize.y))
 		{
 			framebuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
-			cameraController.OnResize(viewportSize.x, viewportSize.y);
-
+			editorCamera.SetViewportSize(viewportSize.x, viewportSize.y);
 			activeScene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
 		}
 
-		// Update
-		//if (viewportFocused)
-		//	cameraController.OnUpdate(ts);
+		editorCamera.OnUpdate(ts);
 
-		// Render
 		framebuffer->Bind();
 
 		RenderCommand::SetClearColor({ 0.08f, 0.08f, 0.08f, 1 });
 		RenderCommand::Clear();
 
-		activeScene->OnUpdate(ts);
+		activeScene->OnUpdateEditor(ts, editorCamera);
 
 		framebuffer->Unbind();
 	}
@@ -210,11 +168,15 @@ namespace Pixie
 			float windowHeight = (float)ImGui::GetWindowHeight();
 			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
-			// Camera
-			auto cameraEntity = activeScene->GetMainCameraEntity();
-			const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
-			const glm::mat4& cameraProjection = camera.GetProjection();
-			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+			// Runtime camera from entity
+			//auto cameraEntity = activeScene->GetMainCameraEntity();
+			//const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+			//const glm::mat4& cameraProjection = camera.GetProjection();
+			//glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+			// Editor camera
+			const glm::mat4& cameraProjection = editorCamera.GetProjection();
+			glm::mat4 cameraView = editorCamera.GetViewMatrix();
 
 			// Entity transform
 			auto& tc = selectedEntity.GetComponent<TransformComponent>();
@@ -252,10 +214,11 @@ namespace Pixie
 
 	void Editor::OnEvent(Event& e)
 	{
-		cameraController.OnEvent(e);
+		editorCamera.OnEvent(e);
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(PX_BIND_EVENT_FN(Editor::OnKeyPressed));
+
 	}
 
 	bool Editor::OnKeyPressed(KeyPressedEvent& e)

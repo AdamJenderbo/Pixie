@@ -26,22 +26,18 @@ namespace Pixie
 		void SaveSceneAs();
 
 	private:
+
+		EditorCamera editorCamera;
 		Ref<Scene> activeScene;
 		Ref<Framebuffer> framebuffer;
-		OrthographicCameraController cameraController;
-		Entity greenSquare;
-		Entity blueSquare;
-		Entity camera;
-		Entity secondaryCamera;
-		bool primaryCamera = true;
-
-		Ref<Texture2D> texture;
 
 		glm::vec2 viewportSize = { 0.0f, 0.0f };
 		bool viewportFocused = false, viewportHovered = false;
 
-		SceneHierarchyPanel sceneHierarchyPanel;
 		int gizmoType = -1;
+
+		// Panels
+		SceneHierarchyPanel sceneHierarchyPanel;
 	};
 
 }

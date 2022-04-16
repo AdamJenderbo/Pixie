@@ -1,6 +1,8 @@
 #pragma once
 #include "entt/entt.hpp"
 #include "Pixie/Timestep.h"
+#include "Pixie/Renderer/EditorCamera.h"
+
 
 namespace Pixie
 {
@@ -15,7 +17,8 @@ namespace Pixie
 		Entity CreateEntity(const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
 
-		void OnUpdate(Timestep ts);
+		void OnUpdateRuntime(Timestep ts);
+		void OnUpdateEditor(Timestep ts, EditorCamera& camera);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		Entity GetMainCameraEntity();

@@ -115,6 +115,7 @@
     <ClInclude Include="src\Pixie\MouseCodes.h" />
     <ClInclude Include="src\Pixie\Renderer\Buffer.h" />
     <ClInclude Include="src\Pixie\Renderer\Camera.h" />
+    <ClInclude Include="src\Pixie\Renderer\EditorCamera.h" />
     <ClInclude Include="src\Pixie\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Pixie\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Pixie\Renderer\OrthographicCamera.h" />
@@ -580,6 +581,7 @@
     <ClCompile Include="src\Pixie\LayerStack.cpp" />
     <ClCompile Include="src\Pixie\Math\Math.cpp" />
     <ClCompile Include="src\Pixie\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Pixie\Renderer\EditorCamera.cpp" />
     <ClCompile Include="src\Pixie\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Pixie\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Pixie\Renderer\OrthographicCameraController.cpp" />
