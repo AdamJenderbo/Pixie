@@ -41,6 +41,7 @@ namespace Pixie
 		bool viewportFocused = false, viewportHovered = false;
 
 		SceneHierarchyPanel sceneHierarchyPanel;
+		int gizmoType = -1;
 	};
 
 }

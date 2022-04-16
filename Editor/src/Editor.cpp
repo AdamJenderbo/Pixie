@@ -8,6 +8,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+
+#include "Pixie/ImGui/ImGuizmo.h"
+
+#include "Pixie/Math/Math.h"
+
 #include "Pixie/Utils/PlatformUtils.h"
 
 namespace Pixie
@@ -54,13 +59,13 @@ namespace Pixie
 				auto& translation = GetComponent<TransformComponent>().Translation;
 				float speed = 5.0f;
 
-				if (Input::IsKeyPressed(Key::A))
+				if (Input::IsKeyPressed(Key::J))
 					translation.x -= speed * ts;
-				if (Input::IsKeyPressed(Key::D))
+				if (Input::IsKeyPressed(Key::L))
 					translation.x += speed * ts;
-				if (Input::IsKeyPressed(Key::W))
+				if (Input::IsKeyPressed(Key::I))
 					translation.y += speed * ts;
-				if (Input::IsKeyPressed(Key::S))
+				if (Input::IsKeyPressed(Key::K))
 					translation.y -= speed * ts;
 			}
 		};
@@ -186,13 +191,59 @@ namespace Pixie
 
 		viewportFocused = ImGui::IsWindowFocused();
 		viewportHovered = ImGui::IsWindowHovered();
-		Application::Get().GetImGuiLayer()->BlockEvents(!viewportFocused || !viewportHovered);
+		Application::Get().GetImGuiLayer()->BlockEvents(!viewportFocused && !viewportHovered);
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
 		uint32_t textureID = framebuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ viewportSize.x, viewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		// Gizmos
+		Entity selectedEntity = sceneHierarchyPanel.GetSelectedEntity();
+		if (selectedEntity && gizmoType != -1)
+		{
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
+
+			float windowWidth = (float)ImGui::GetWindowWidth();
+			float windowHeight = (float)ImGui::GetWindowHeight();
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+
+			// Camera
+			auto cameraEntity = activeScene->GetMainCameraEntity();
+			const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+			const glm::mat4& cameraProjection = camera.GetProjection();
+			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+			// Entity transform
+			auto& tc = selectedEntity.GetComponent<TransformComponent>();
+			glm::mat4 transform = tc.GetTransform();
+
+			// Snapping
+			bool snap = Input::IsKeyPressed(Key::LeftControl);
+			float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+			// Snap to 45 degrees for rotation
+			if (gizmoType == ImGuizmo::OPERATION::ROTATE)
+				snapValue = 45.0f;
+
+			float snapValues[3] = { snapValue, snapValue, snapValue };
+
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+				(ImGuizmo::OPERATION)gizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
+				nullptr, snap ? snapValues : nullptr);
+
+			if (ImGuizmo::IsUsing())
+			{
+				glm::vec3 translation, rotation, scale;
+				Math::DecomposeTransform(transform, translation, rotation, scale);
+
+				glm::vec3 deltaRotation = rotation - tc.Rotation;
+				tc.Translation = translation;
+				tc.Rotation += deltaRotation;
+				tc.Scale = scale;
+			}
+		}
 
 		ImGui::End();
 		ImGui::PopStyleVar();
@@ -238,6 +289,20 @@ namespace Pixie
 
 			break;
 		}
+
+		// Gizmos
+		case Key::Q:
+			gizmoType = -1;
+			break;
+		case Key::W:
+			gizmoType = ImGuizmo::OPERATION::TRANSLATE;
+			break;
+		case Key::E:
+			gizmoType = ImGuizmo::OPERATION::ROTATE;
+			break;
+		case Key::R:
+			gizmoType = ImGuizmo::OPERATION::SCALE;
+			break;
 		}
 	}
 
@@ -258,7 +323,36 @@ namespace Pixie
 			sceneHierarchyPanel.SetScene(activeScene);
 
 			SceneSerializer serializer(activeScene);
+
 			serializer.Deserialize(filepath);
+			class CameraController : public ScriptableEntity
+			{
+			public:
+				virtual void OnCreate() override
+				{
+				}
+
+				virtual void OnDestroy() override
+				{
+				}
+
+				virtual void OnUpdate(Timestep ts) override
+				{
+					auto& translation = GetComponent<TransformComponent>().Translation;
+					float speed = 5.0f;
+
+					if (Input::IsKeyPressed(Key::Left))
+						translation.x -= speed * ts;
+					if (Input::IsKeyPressed(Key::Right))
+						translation.x += speed * ts;
+					if (Input::IsKeyPressed(Key::Up))
+						translation.y += speed * ts;
+					if (Input::IsKeyPressed(Key::Down))
+						translation.y -= speed * ts;
+				}
+			};
+
+			activeScene->GetMainCameraEntity().AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		}
 	}
 

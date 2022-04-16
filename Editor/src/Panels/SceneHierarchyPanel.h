@@ -17,6 +17,8 @@ namespace Pixie
 		void SetScene(const Ref<Scene>& scene);
 
 		void OnImGuiRender();
+
+		Entity GetSelectedEntity() const { return selectedEntity; }
 	private:
 		void DrawEntityNode(Entity entity);
 		void DrawComponents(Entity entity);

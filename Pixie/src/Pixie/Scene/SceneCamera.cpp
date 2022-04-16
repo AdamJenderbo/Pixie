@@ -37,9 +37,7 @@ namespace Pixie
 	void SceneCamera::RecalculateProjection()
 	{
 		if (projectionType == ProjectionType::Perspective)
-		{
-			projection = glm::perspective(perspectiveFOV, aspectRatio, perspectiveNear, perspectiveNear);
-		}
+			projection = glm::perspective(perspectiveFOV, aspectRatio, perspectiveNear, perspectiveFar);
 		else
 		{
 			float orthoLeft = -orthographicSize * aspectRatio * 0.5f;

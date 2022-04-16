@@ -31,7 +31,8 @@ project "Pixie"
         "Pixie/vendor/glm",
         "Pixie/vendor/entt/include",
         "Pixie/vendor/stb_image",
-        "Pixie/vendor/yaml/include"
+        "Pixie/vendor/yaml/include",
+        "Pixie/vendor/ImGuizmo"
 	}
 
     files 
@@ -41,7 +42,10 @@ project "Pixie"
         "Pixie/vendor/stb_image/**.h",
 		"Pixie/vendor/stb_image/**.cpp",
 		"Pixie/vendor/glm/glm/**.hpp",
-		"Pixie/vendor/glm/glm/**.inl"
+		"Pixie/vendor/glm/glm/**.inl",
+
+        -- "vendor/ImGuizmo/ImGuizmo.h",
+		-- "vendor/ImGuizmo/ImGuizmo.cpp"
     }
 
     links
@@ -57,6 +61,10 @@ project "Pixie"
     {
         "YAML_CPP_STATIC_DEFINE"
     }
+
+    filter "files:Pixie/src/Pixie/ImGui/**.cpp"
+	    flags { "NoPCH" }
+
 
     filter "configurations:Debug"
         defines { "DEBUG" }

@@ -13,3 +13,6 @@
 [submodule "Pixie/vendor/yaml"]
 	path = Pixie/vendor/yaml
 	url = https://github.com/AdamJenderbo/yaml-cpp
+[submodule "Pixie/vendor/ImGuizmo"]
+	path = Pixie/vendor/ImGuizmo
+	url = https://github.com/AdamJenderbo/ImGuizmo
