@@ -117,6 +117,9 @@
     <ClInclude Include="src\Pixie\Renderer\Camera.h">
       <Filter>src\Pixie\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Pixie\Renderer\EditorCamera.h">
+      <Filter>src\Pixie\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Pixie\Renderer\Framebuffer.h">
       <Filter>src\Pixie\Renderer</Filter>
     </ClInclude>
@@ -1461,7 +1464,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Pixie\Renderer\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pixie\Application.cpp">
@@ -1489,6 +1491,9 @@
       <Filter>src\Pixie\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Pixie\Renderer\Buffer.cpp">
+      <Filter>src\Pixie\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pixie\Renderer\EditorCamera.cpp">
       <Filter>src\Pixie\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Pixie\Renderer\Framebuffer.cpp">
@@ -1578,6 +1583,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Pixie\Renderer\EditorCamera.cpp" />
   </ItemGroup>
 </Project>

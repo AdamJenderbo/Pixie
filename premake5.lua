@@ -4,10 +4,14 @@ workspace "Pixie"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-include "Pixie/vendor/GLFW"
-include "Pixie/vendor/Glad"
-include "Pixie/vendor/imgui"
-include "Pixie/vendor/yaml"
+
+
+group "Dependencies"
+    include "Pixie/vendor/GLFW"
+    include "Pixie/vendor/Glad"
+    include "Pixie/vendor/imgui"
+    include "Pixie/vendor/yaml"
+group ""
 
 project "Pixie"
     location "Pixie"
