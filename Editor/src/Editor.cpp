@@ -15,6 +15,8 @@
 
 #include "Pixie/Utils/PlatformUtils.h"
 
+#define PX_BIND_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+
 namespace Pixie
 {
 
@@ -26,6 +28,7 @@ namespace Pixie
 	void Editor::OnAttach()
 	{
 		FramebufferSpecification fbSpec;
+		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		framebuffer = Framebuffer::Create(fbSpec);
@@ -154,7 +157,7 @@ namespace Pixie
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
-		uint32_t textureID = framebuffer->GetColorAttachmentRendererID();
+		uint32_t textureID = framebuffer->GetColorAttachmentRendererID(0);
 		ImGui::Image((void*)textureID, ImVec2{ viewportSize.x, viewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		// Gizmos

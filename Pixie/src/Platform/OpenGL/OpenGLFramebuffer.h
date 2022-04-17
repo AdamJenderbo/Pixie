@@ -19,13 +19,18 @@ namespace Pixie
 
 		virtual void Resize(uint32_t width, uint32_t height) override;
 
-		virtual uint32_t GetColorAttachmentRendererID() const override { return colorAttachment; }
+		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const override { return colorAttachments[index]; }
 
 		virtual const FramebufferSpecification& GetSpecification() const override { return specification; }
 	private:
 		uint32_t rendererID = 0;
-		uint32_t colorAttachment = 0, depthAttachment = 0;
 		FramebufferSpecification specification;
+
+		std::vector<FramebufferTextureSpecification> colorAttachmentSpecifications;
+		FramebufferTextureSpecification depthAttachmentSpecification = FramebufferTextureFormat::None;
+
+		std::vector<uint32_t> colorAttachments;
+		uint32_t depthAttachment = 0;
 	};
 
 }
