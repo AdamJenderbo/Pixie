@@ -56,6 +56,11 @@ namespace Pixie
 		ImGui::End();
 	}
 
+	void SceneHierarchyPanel::SetSelectedEntity(Entity entity)
+	{
+		selectedEntity = entity;
+	}
+
 
 	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
 	{

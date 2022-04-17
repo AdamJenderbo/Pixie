@@ -168,10 +168,6 @@ namespace Pixie
 
 		sceneHierarchyPanel.OnImGuiRender();
 
-
-
-
-
 		ImGui::Begin("Stats");
 		std::string name = "None";
 		if (hoveredEntity)
@@ -257,7 +253,7 @@ namespace Pixie
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(PX_BIND_EVENT_FN(Editor::OnKeyPressed));
-
+		dispatcher.Dispatch<MouseButtonPressedEvent>(PX_BIND_EVENT_FN(Editor::OnMouseButtonPressed));
 	}
 
 	bool Editor::OnKeyPressed(KeyPressedEvent& e)
@@ -306,6 +302,16 @@ namespace Pixie
 			gizmoType = ImGuizmo::OPERATION::SCALE;
 			break;
 		}
+	}
+
+	bool Editor::OnMouseButtonPressed(MouseButtonPressedEvent& e)
+	{
+		if (e.GetMouseButton() == Mouse::ButtonLeft)
+		{
+			if (viewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(Key::LeftAlt))
+				sceneHierarchyPanel.SetSelectedEntity(hoveredEntity);
+		}
+		return false;
 	}
 
 	void Editor::NewScene()

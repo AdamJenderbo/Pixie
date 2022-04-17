@@ -19,6 +19,7 @@ namespace Pixie
 		void OnImGuiRender();
 
 		Entity GetSelectedEntity() const { return selectedEntity; }
+		void SetSelectedEntity(Entity entity);
 
 	private:
 		void DrawEntityNode(Entity entity);
