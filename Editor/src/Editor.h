@@ -2,6 +2,7 @@
 
 #include "Pixie.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "Panels/InspectorPanel.h"
 
 namespace Pixie
 {
@@ -21,6 +22,7 @@ namespace Pixie
 	private:
 		bool OnKeyPressed(KeyPressedEvent& e);
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
+		void OnSelectEntity(Entity entity);
 
 		void NewScene();
 		void OpenScene();
@@ -42,6 +44,7 @@ namespace Pixie
 
 		// Panels
 		SceneHierarchyPanel sceneHierarchyPanel;
+		InspectorPanel inspectorPanel;
 	};
 
 }

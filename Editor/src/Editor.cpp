@@ -42,6 +42,7 @@ namespace Pixie
 		editorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
 		sceneHierarchyPanel.SetScene(activeScene);
+		sceneHierarchyPanel.SetSelectEntityCallback(PX_BIND_EVENT_FN(Editor::OnSelectEntity));
 	}
 
 	void Editor::OnDetach()
@@ -167,6 +168,7 @@ namespace Pixie
 		}
 
 		sceneHierarchyPanel.OnImGuiRender();
+		inspectorPanel.OnImGuiRender();
 
 		ImGui::Begin("Stats");
 		std::string name = "None";
@@ -309,9 +311,14 @@ namespace Pixie
 		if (e.GetMouseButton() == Mouse::ButtonLeft)
 		{
 			if (viewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(Key::LeftAlt))
-				sceneHierarchyPanel.SetSelectedEntity(hoveredEntity);
+				sceneHierarchyPanel.SelectEntity(hoveredEntity);
 		}
 		return false;
+	}
+
+	void Editor::OnSelectEntity(Entity entity)
+	{
+		inspectorPanel.SetEntity(entity);
 	}
 
 	void Editor::NewScene()

@@ -19,19 +19,16 @@ namespace Pixie
 		void OnImGuiRender();
 
 		Entity GetSelectedEntity() const { return selectedEntity; }
-		void SetSelectedEntity(Entity entity);
+		void SelectEntity(Entity entity);
+		void SetSelectEntityCallback(std::function<void(Entity)> callback);
 
 	private:
 		void DrawEntityNode(Entity entity);
-
-		void DrawComponents(Entity& entity);
-
-		static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f);
 
 
 	private:
 		Ref<Scene> scene;
 		Entity selectedEntity;
-		std::function<void(Ref<Entity>)> SelectEntityCallback;
+		std::function<void(Entity)> SelectEntityCallback;
 	};
 }
