@@ -22,7 +22,7 @@ namespace Pixie
 		ImGui::End();
 	}
 
-	void InspectorPanel::SetEntity(Entity entity)
+	void InspectorPanel::OnSelectEntity(Entity entity)
 	{
 		this->entity = entity;
 	}

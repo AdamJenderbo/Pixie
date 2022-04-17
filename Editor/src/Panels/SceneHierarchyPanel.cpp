@@ -3,7 +3,6 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
-#include "Pixie/Scene/Components.h"
 #include <glm/gtc/type_ptr.hpp>
 
 #ifdef _MSVC_LANG
@@ -22,6 +21,11 @@ namespace Pixie
 	{
 		this->scene = scene;
 		selectedEntity = {};
+	}
+
+	void SceneHierarchyPanel::SetOnSelectEntity(std::function<void(Entity)> func)
+	{
+		OnSelectEntity = func;
 	}
 
 	void SceneHierarchyPanel::OnImGuiRender()
@@ -49,17 +53,16 @@ namespace Pixie
 		ImGui::End();
 	}
 
+	void SceneHierarchyPanel::OnClickEntity(Entity entity)
+	{
+		SelectEntity(entity);
+	}
+
 	void SceneHierarchyPanel::SelectEntity(Entity entity)
 	{
 		selectedEntity = entity;
-		SelectEntityCallback(entity);
+		OnSelectEntity(entity);
 	}
-
-	void SceneHierarchyPanel::SetSelectEntityCallback(std::function<void(Entity)> callback)
-	{
-		SelectEntityCallback = callback;
-	}
-
 
 	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
 	{
@@ -70,7 +73,7 @@ namespace Pixie
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
 
 		if (ImGui::IsItemClicked())
-			selectedEntity = entity;
+			SelectEntity(entity);
 
 		bool entityDeleted = false;
 		if (ImGui::BeginPopupContextItem())

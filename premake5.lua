@@ -137,6 +137,7 @@ project "Editor"
 
     includedirs
     {
+        "Editor/src",
         "Pixie/src",
         "Pixie/vendor/GLFW/include",
         "Pixie/vendor/glm",

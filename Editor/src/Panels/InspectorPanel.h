@@ -14,8 +14,7 @@ namespace Pixie
 		InspectorPanel() = default;
 
 		void OnImGuiRender();
-
-		void SetEntity(Entity entity);
+		void OnSelectEntity(Entity entity);
 
 	private:
 		void DrawComponents(Entity& entity);
