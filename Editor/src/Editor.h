@@ -37,6 +37,8 @@ namespace Pixie
 
 		int gizmoType = -1;
 
+		Entity hoveredEntity;
+
 		// Panels
 		SceneHierarchyPanel sceneHierarchyPanel;
 	};

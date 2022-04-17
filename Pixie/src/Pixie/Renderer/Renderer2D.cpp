@@ -17,6 +17,9 @@ namespace Pixie
 		glm::vec2 TexCoord;
 		float TexIndex;
 		float TilingFactor;
+
+		// Editor-only
+		int EntityID;
 	};
 
 	struct Renderer2DData
@@ -40,12 +43,12 @@ namespace Pixie
 
 		glm::vec4 QuadVertexPositions[4];
 
-		void AddQuad(const glm::mat4 transform, const glm::vec4 color, int textureIndex, float tilingFactor)
+		void AddQuad(const glm::mat4 transform, const glm::vec4 color, int textureIndex, float tilingFactor, int entityID)
 		{
-			AddVertex({ transform * QuadVertexPositions[0], color, {0.0f, 0.0f}, (float) textureIndex, tilingFactor });
-			AddVertex({ transform * QuadVertexPositions[1], color, {1.0f, 0.0f}, (float) textureIndex, tilingFactor });
-			AddVertex({ transform * QuadVertexPositions[2], color, {1.0f, 1.0f}, (float) textureIndex, tilingFactor });
-			AddVertex({ transform * QuadVertexPositions[3], color, {0.0f, 1.0f}, (float) textureIndex, tilingFactor });
+			AddVertex({ transform * QuadVertexPositions[0], color, {0.0f, 0.0f}, (float) textureIndex, tilingFactor, entityID});
+			AddVertex({ transform * QuadVertexPositions[1], color, {1.0f, 0.0f}, (float) textureIndex, tilingFactor, entityID});
+			AddVertex({ transform * QuadVertexPositions[2], color, {1.0f, 1.0f}, (float) textureIndex, tilingFactor, entityID});
+			AddVertex({ transform * QuadVertexPositions[3], color, {0.0f, 1.0f}, (float) textureIndex, tilingFactor, entityID});
 
 			QuadIndexCount += 6;
 		}
@@ -76,6 +79,7 @@ namespace Pixie
 			QuadVertexBufferPtr->TexCoord = vertex.TexCoord;
 			QuadVertexBufferPtr->TexIndex = vertex.TexIndex;
 			QuadVertexBufferPtr->TilingFactor = vertex.TilingFactor;
+			QuadVertexBufferPtr->EntityID = vertex.EntityID;
 			QuadVertexBufferPtr++;
 		}
 	};
@@ -88,11 +92,12 @@ namespace Pixie
 
 		data.QuadVertexBuffer = VertexBuffer::Create(data.MaxVertices * sizeof(QuadVertex));
 		data.QuadVertexBuffer->SetLayout({
-			{ ShaderDataType::Float3, "a_Position" },
-			{ ShaderDataType::Float4, "a_Color" },
-			{ ShaderDataType::Float2, "a_TexCoord" },
-			{ ShaderDataType::Float, "a_TexIndex" },
-			{ ShaderDataType::Float, "a_TilingFactor" }
+			{ ShaderDataType::Float3, "a_Position"     },
+			{ ShaderDataType::Float4, "a_Color"        },
+			{ ShaderDataType::Float2, "a_TexCoord"     },
+			{ ShaderDataType::Float,  "a_TexIndex"     },
+			{ ShaderDataType::Float,  "a_TilingFactor" },
+			{ ShaderDataType::Int,    "a_EntityID"     }
 		});
 
 		data.QuadVertexArray->AddVertexBuffer(data.QuadVertexBuffer);
@@ -202,25 +207,25 @@ namespace Pixie
 	}
 
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, int entityID)
 	{
-		DrawQuad({ position.x, position.y, 0.0f }, size, color);
+		DrawQuad({ position.x, position.y, 0.0f }, size, color, entityID);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, int entityID)
 	{
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-		DrawQuad(transform, color);
+		DrawQuad(transform, color, entityID);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor, int entityID)
 	{
 		DrawQuad({ position.x, position.y, 0.0f }, size, texture, tilingFactor, tintColor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor, int entityID)
 	{
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
@@ -228,7 +233,7 @@ namespace Pixie
 		DrawQuad(transform, texture, tilingFactor, tintColor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4 transform, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::mat4 transform, const glm::vec4& color, int entityID)
 	{
 		if (data.QuadIndexCount >= Renderer2DData::MaxIndices)
 			NextBatch();
@@ -236,10 +241,10 @@ namespace Pixie
 		const int textureIndex = 0;
 		const float tilingFactor = 1.0f;
 
-		data.AddQuad(transform, color, textureIndex, tilingFactor);
+		data.AddQuad(transform, color, textureIndex, tilingFactor, entityID);
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4 transform, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
+	void Renderer2D::DrawQuad(const glm::mat4 transform, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor, int entityID)
 	{
 		if (data.QuadIndexCount >= Renderer2DData::MaxIndices)
 			NextBatch();
@@ -251,15 +256,15 @@ namespace Pixie
 		if (textureIndex == 0)
 			textureIndex = data.AddTexture(texture);
 
-		data.AddQuad(transform, color, textureIndex, tilingFactor);
+		data.AddQuad(transform, color, textureIndex, tilingFactor, entityID);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color, int entityID)
 	{
-		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, color);
+		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, color, entityID);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color, int entityID)
 	{
 		if (data.QuadIndexCount >= Renderer2DData::MaxIndices)
 			NextBatch();
@@ -271,15 +276,15 @@ namespace Pixie
 			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-		data.AddQuad(transform, color, textureIndex, tilingFactor);
+		data.AddQuad(transform, color, textureIndex, tilingFactor, entityID);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor, int entityID)
 	{
-		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, texture, tilingFactor, tintColor);
+		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, texture, tilingFactor, tintColor, entityID);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor, int entityID)
 	{
 		if (data.QuadIndexCount >= Renderer2DData::MaxIndices)
 			NextBatch();
@@ -295,6 +300,10 @@ namespace Pixie
 			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-		data.AddQuad(transform, color, textureIndex, tilingFactor);
+		data.AddQuad(transform, color, textureIndex, tilingFactor, entityID);
+	}
+	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& spriteRenderer, int entityID)
+	{
+		DrawQuad(transform, spriteRenderer.Color, entityID);
 	}
 }

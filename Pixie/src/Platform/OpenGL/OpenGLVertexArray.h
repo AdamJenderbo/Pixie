@@ -21,6 +21,7 @@ namespace Pixie
 		virtual const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const { return indexBuffer; }
 	private:
 		uint32_t rendererID;
+		uint32_t vertexBufferIndex = 0;
 		std::vector<std::shared_ptr<VertexBuffer>> vertexBuffers;
 		std::shared_ptr<IndexBuffer> indexBuffer;
 	};
