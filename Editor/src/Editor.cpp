@@ -28,7 +28,11 @@ namespace Pixie
 	void Editor::OnAttach()
 	{
 		FramebufferSpecification fbSpec;
-		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
+		fbSpec.Attachments = { 
+			FramebufferTextureFormat::RGBA8, 
+			FramebufferTextureFormat::RED_INTEGER, 
+			//FramebufferTextureFormat::Depth
+		};
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		framebuffer = Framebuffer::Create(fbSpec);
@@ -65,6 +69,20 @@ namespace Pixie
 		RenderCommand::Clear();
 
 		activeScene->OnUpdateEditor(ts, editorCamera);
+
+		auto [mx, my] = ImGui::GetMousePos();
+		mx -= viewportBounds[0].x;
+		my -= viewportBounds[0].y;
+		glm::vec2 viewportSize = viewportBounds[1] - viewportBounds[0];
+		my = viewportSize.y - my;
+		int mouseX = (int)mx;
+		int mouseY = (int)my;
+
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+		{
+			int pixelData = framebuffer->ReadPixel(1, mouseX, mouseY);
+			Console::LogWarning("Pixel data = " + std::to_string(pixelData));
+		}
 
 		framebuffer->Unbind();
 	}
@@ -150,6 +168,7 @@ namespace Pixie
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Scene");
 
+		auto viewportOffset = ImGui::GetCursorPos(); // Includes tab bar
 		viewportFocused = ImGui::IsWindowFocused();
 		viewportHovered = ImGui::IsWindowHovered();
 		Application::Get().GetImGuiLayer()->BlockEvents(!viewportFocused && !viewportHovered);
@@ -157,8 +176,17 @@ namespace Pixie
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
-		uint32_t textureID = framebuffer->GetColorAttachmentRendererID(0);
-		ImGui::Image((void*)textureID, ImVec2{ viewportSize.x, viewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		uint64_t textureID = framebuffer->GetColorAttachmentRendererID();
+		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ viewportSize.x, viewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		auto windowSize = ImGui::GetWindowSize();
+		ImVec2 minBound = ImGui::GetWindowPos();
+		minBound.x += viewportOffset.x;
+		minBound.y += viewportOffset.y;
+
+		ImVec2 maxBound = { minBound.x + windowSize.x, minBound.y + windowSize.y };
+		viewportBounds[0] = { minBound.x, minBound.y };
+		viewportBounds[1] = { maxBound.x, maxBound.y };
 
 		// Gizmos
 		Entity selectedEntity = sceneHierarchyPanel.GetSelectedEntity();

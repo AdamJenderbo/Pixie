@@ -32,6 +32,7 @@ namespace Pixie
 		Ref<Framebuffer> framebuffer;
 
 		glm::vec2 viewportSize = { 0.0f, 0.0f };
+		glm::vec2 viewportBounds[2];
 		bool viewportFocused = false, viewportHovered = false;
 
 		int gizmoType = -1;
