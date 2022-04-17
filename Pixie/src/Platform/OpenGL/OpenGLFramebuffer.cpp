@@ -76,6 +76,17 @@ namespace Pixie
 			return false;
 		}
 
+		static GLenum PixieFBTextureFormatToGL(FramebufferTextureFormat format)
+		{
+			switch (format)
+			{
+			case FramebufferTextureFormat::RGBA8:       return GL_RGBA8;
+			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
+			}
+
+			return 0;
+		}
+
 	}
 
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
@@ -192,5 +203,12 @@ namespace Pixie
 		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
 		return pixelData;
 
+	}
+
+	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value)
+	{
+		auto& spec = colorAttachmentSpecifications[attachmentIndex];
+		glClearTexImage(colorAttachments[attachmentIndex], 0,
+			Utils::PixieFBTextureFormatToGL(spec.TextureFormat), GL_INT, &value);
 	}
 }

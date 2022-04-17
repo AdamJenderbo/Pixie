@@ -68,6 +68,8 @@ namespace Pixie
 		RenderCommand::SetClearColor({ 0.08f, 0.08f, 0.08f, 1 });
 		RenderCommand::Clear();
 
+		framebuffer->ClearAttachment(1, -1);
+
 		activeScene->OnUpdateEditor(ts, editorCamera);
 
 		auto [mx, my] = ImGui::GetMousePos();
