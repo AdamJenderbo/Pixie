@@ -27,6 +27,12 @@ namespace Pixie
 		void OpenScene();
 		void OpenScene(const std::filesystem::path & path);
 		void SaveSceneAs();
+
+		void OnScenePlay();
+		void OnSceneStop();
+
+		// UI Panels
+		void UI_Toolbar();
 	private:
 		Ref<Scene> scene;
 		EditorCamera editorCamera;
@@ -40,9 +46,16 @@ namespace Pixie
 
 		int gizmoType = -1;
 
+		enum class SceneState
+		{
+			Edit = 0, Play = 1
+		};
+		SceneState sceneState = SceneState::Edit;
+
 		// Panels
 		HierarchyPanel hierarchyPanel;
 		ContentBrowserPanel contentBrowserPanel;
 
+		Ref<Texture2D> iconPlay, iconStop;
 	};
 }

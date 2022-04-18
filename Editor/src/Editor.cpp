@@ -47,6 +47,9 @@ namespace Pixie
 		editorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
 		hierarchyPanel.SetScene(scene);
+
+		iconPlay = Texture2D::Create("Resources/Icons/PlayButton.png");
+		iconStop = Texture2D::Create("Resources/Icons/StopButton.png");
 	}
 
 	void Editor::OnDetach()
@@ -65,8 +68,6 @@ namespace Pixie
 			scene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
 		}
 
-		editorCamera.OnUpdate(ts);
-
 		// Render
 		framebuffer->Bind();
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
@@ -76,7 +77,22 @@ namespace Pixie
 		framebuffer->ClearAttachment(1, -1);
 
 		// Update scene
-		scene->OnUpdateEditor(ts, editorCamera);
+		switch (sceneState)
+		{
+			case SceneState::Edit:
+			{
+				editorCamera.OnUpdate(ts);
+
+				scene->OnUpdateEditor(ts, editorCamera);
+				break;
+			}
+			case SceneState::Play:
+			{
+				scene->OnUpdateRuntime(ts);
+				break;
+			}
+		}
+
 
 		auto [mx, my] = ImGui::GetMousePos();
 		mx -= viewportBounds[0].x;
@@ -255,6 +271,36 @@ namespace Pixie
 		ImGui::End();
 		ImGui::PopStyleVar();
 
+		UI_Toolbar();
+
+		ImGui::End();
+	}
+
+	void Editor::UI_Toolbar()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+		auto& colors = ImGui::GetStyle().Colors;
+		const auto& buttonHovered = colors[ImGuiCol_ButtonHovered];
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(buttonHovered.x, buttonHovered.y, buttonHovered.z, 0.5f));
+		const auto& buttonActive = colors[ImGuiCol_ButtonActive];
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(buttonActive.x, buttonActive.y, buttonActive.z, 0.5f));
+
+		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+		float size = ImGui::GetWindowHeight() - 4.0f;
+		Ref<Texture2D> icon = sceneState == SceneState::Edit ? iconPlay : iconStop;
+		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+		{
+			if (sceneState == SceneState::Edit)
+				OnScenePlay();
+			else if (sceneState == SceneState::Play)
+				OnSceneStop();
+		}
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor(3);
 		ImGui::End();
 	}
 
@@ -370,5 +416,17 @@ namespace Pixie
 			SceneSerializer serializer(scene);
 			serializer.Serialize(filepath);
 		}
+	}
+
+
+	void Editor::OnScenePlay()
+	{
+		sceneState = SceneState::Play;
+	}
+
+	void Editor::OnSceneStop()
+	{
+		sceneState = SceneState::Edit;
+
 	}
 }
