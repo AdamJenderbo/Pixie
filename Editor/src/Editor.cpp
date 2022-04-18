@@ -131,7 +131,8 @@ namespace Pixie
 		scenePanel.OnImGuiRender();
 		hierarchyPanel.OnImGuiRender();
 		inspectorPanel.OnImGuiRender();
-		statsPanel.OnImGuiRender();
+		contentBrowserPanel.OnImGuiRender();
+		//statsPanel.OnImGuiRender();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 

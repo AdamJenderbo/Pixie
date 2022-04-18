@@ -4,6 +4,7 @@
 #include "Panels/ScenePanel.h"
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/InspectorPanel.h"
+#include "Panels/ContentBrowserPanel.h"
 #include "Panels/StatsPanel.h"
 
 namespace Pixie
@@ -39,21 +40,11 @@ namespace Pixie
 
 		Ref<Scene> activeScene;
 
-		//EditorCamera editorCamera;
-		//Ref<Framebuffer> framebuffer;
-
-		//glm::vec2 viewportSize = { 0.0f, 0.0f };
-		//glm::vec2 viewportBounds[2];
-		//bool viewportFocused = false, viewportHovered = false;
-
-		//int gizmoType = -1;
-
-		//Entity hoveredEntity;
-
 		// Panels
 		ScenePanel scenePanel;
 		SceneHierarchyPanel hierarchyPanel;
 		InspectorPanel inspectorPanel;
+		ContentBrowserPanel contentBrowserPanel;
 		StatsPanel statsPanel;
 	};
 }
