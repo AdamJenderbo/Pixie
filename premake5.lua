@@ -4,6 +4,26 @@ workspace "Pixie"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+VULKAN_SDK = os.getenv("VULKAN_SDK")
+
+LibraryDir = {}
+
+LibraryDir["VulkanSDK"] = "%{VULKAN_SDK}/Lib"
+LibraryDir["VulkanSDK_Debug"] = "vendor/VulkanSDK/Lib"
+LibraryDir["VulkanSDK_DebugDLL"] = "%{wks.location}/Pixie/vendor/VulkanSDK/Bin"
+
+Library = {}
+Library["Vulkan"] = "%{LibraryDir.VulkanSDK}/vulkan-1.lib"
+Library["VulkanUtils"] = "%{LibraryDir.VulkanSDK}/VkLayer_utils.lib"
+
+Library["ShaderC_Debug"] = "%{LibraryDir.VulkanSDK_Debug}/shaderc_sharedd.lib"
+Library["SPIRV_Cross_Debug"] = "%{LibraryDir.VulkanSDK_Debug}/spirv-cross-cored.lib"
+Library["SPIRV_Cross_GLSL_Debug"] = "%{LibraryDir.VulkanSDK_Debug}/spirv-cross-glsld.lib"
+Library["SPIRV_Tools_Debug"] = "%{LibraryDir.VulkanSDK_Debug}/SPIRV-Toolsd.lib"
+
+Library["ShaderC_Release"] = "%{LibraryDir.VulkanSDK}/shaderc_shared.lib"
+Library["SPIRV_Cross_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-core.lib"
+Library["SPIRV_Cross_GLSL_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-glsl.lib"
 
 
 group "Dependencies"
@@ -36,7 +56,10 @@ project "Pixie"
         "Pixie/vendor/entt/include",
         "Pixie/vendor/stb_image",
         "Pixie/vendor/yaml/include",
-        "Pixie/vendor/ImGuizmo"
+        "Pixie/vendor/ImGuizmo",
+        "Pixie/vendor/shaderc/include",
+        "Pixie/vendor/SPIRV-Cross",
+        "%{VULKAN_SDK}/Include"
 	}
 
     files 
@@ -58,8 +81,10 @@ project "Pixie"
         "opengl32.lib",
         "Glad",
         "ImGui",
-        "yaml"
+        "yaml",
+        
     }
+
 
     defines 
     {
@@ -73,12 +98,31 @@ project "Pixie"
     filter "configurations:Debug"
         defines { "DEBUG" }
         runtime "Debug"
-        symbols "On"
+        symbols "on"
+
+        links
+		{
+			"%{Library.ShaderC_Debug}",
+			"%{Library.SPIRV_Cross_Debug}",
+			"%{Library.SPIRV_Cross_GLSL_Debug}"
+		}
+
+        postbuildcommands
+		{
+			"{COPYDIR} \"%{LibraryDir.VulkanSDK_DebugDLL}\" \"%{cfg.targetdir}\""
+		}
 
     filter "configurations:Release"
         defines { "RELEASE" }
         runtime "Release"
-        optimize "On"
+        optimize "on"
+
+        links
+		{
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}"
+		}
 
 project "Sandbox"
     location "Sandbox"
@@ -155,6 +199,11 @@ project "Editor"
         defines { "DEBUG" }
         runtime "Debug"
         symbols "On"
+
+        postbuildcommands
+		{
+			"{COPYDIR} \"%{LibraryDir.VulkanSDK_DebugDLL}\" \"%{cfg.targetdir}\""
+		}
 
     filter "configurations:Release"
         defines { "RELEASE" }

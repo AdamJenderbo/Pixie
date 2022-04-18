@@ -13,4 +13,6 @@
 #include <unordered_set>
 #include <array>
 
+#include <filesystem>
+
 #include <Windows.h>

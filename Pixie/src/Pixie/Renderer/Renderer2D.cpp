@@ -1,12 +1,16 @@
 #include "pxpch.h"
 #include "Renderer2D.h"
 
+
 #include "VertexArray.h"
 #include "Shader.h"
 #include "RenderCommand.h"
+#include "Pixie/Renderer/UniformBuffer.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
 #include <glm/gtc/matrix_transform.hpp>
+
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Pixie 
 {
@@ -42,6 +46,13 @@ namespace Pixie
 		uint32_t TextureSlotIndex = 1;
 
 		glm::vec4 QuadVertexPositions[4];
+
+		struct CameraData
+		{
+			glm::mat4 ViewProjection;
+		};
+		CameraData CameraBuffer;
+		Ref<UniformBuffer> CameraUniformBuffer;
 
 		void AddQuad(const glm::mat4 transform, const glm::vec4 color, int textureIndex, float tilingFactor, int entityID)
 		{
@@ -131,10 +142,9 @@ namespace Pixie
 		int32_t samplers[data.MaxTextureSlots];
 		for (uint32_t i = 0; i < data.MaxTextureSlots; i++)
 			samplers[i] = i;
+		data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
 
 		data.TextureShader = Shader::Create("assets/shaders/Texture.glsl");
-		data.TextureShader->Bind();
-		data.TextureShader->SetIntArray("u_Textures", samplers, data.MaxTextureSlots);
 
 		data.TextureSlots[0] = data.WhiteTexture;
 
@@ -142,6 +152,7 @@ namespace Pixie
 		data.QuadVertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
 		data.QuadVertexPositions[2] = { 0.5f,  0.5f, 0.0f, 1.0f };
 		data.QuadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
+
 	}
 
 	void Renderer2D::Shutdown()
@@ -150,20 +161,16 @@ namespace Pixie
 
 	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
-		glm::mat4 viewProj = camera.GetProjection() * glm::inverse(transform);
-
-		data.TextureShader->Bind();
-		data.TextureShader->SetMat4("u_ViewProjection", viewProj);
+		data.CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
+		data.CameraUniformBuffer->SetData(&data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
 		StartBatch();
 	}
 
 	void Renderer2D::BeginScene(const EditorCamera& camera)
 	{
-		glm::mat4 viewProj = camera.GetViewProjection();
-
-		data.TextureShader->Bind();
-		data.TextureShader->SetMat4("u_ViewProjection", viewProj);
+		data.CameraBuffer.ViewProjection = camera.GetViewProjection();
+		data.CameraUniformBuffer->SetData(&data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
 		StartBatch();
 	}
@@ -197,6 +204,7 @@ namespace Pixie
 		for (uint32_t i = 0; i < data.TextureSlotIndex; i++)
 			data.TextureSlots[i]->Bind(i);
 
+		data.TextureShader->Bind();
 		RenderCommand::DrawIndexed(data.QuadVertexArray, data.QuadIndexCount);
 	}
 

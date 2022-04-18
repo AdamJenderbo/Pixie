@@ -12,3 +12,7 @@ bin-int/
 **.vcxproj
 **.vcxproj.filters
 **.vcxproj.user
+
+Pixie/vendor/VulkanSDK
+Editor/assets/cache
+scripts/__pycache__ 

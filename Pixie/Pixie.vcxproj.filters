@@ -150,6 +150,9 @@
     <ClInclude Include="src\Pixie\Renderer\Texture.h">
       <Filter>src\Pixie\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Pixie\Renderer\UniformBuffer.h">
+      <Filter>src\Pixie\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Pixie\Renderer\VertexArray.h">
       <Filter>src\Pixie\Renderer</Filter>
     </ClInclude>
@@ -175,6 +178,9 @@
       <Filter>src\Pixie</Filter>
     </ClInclude>
     <ClInclude Include="src\Pixie\Time.h">
+      <Filter>src\Pixie</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pixie\Timer.h">
       <Filter>src\Pixie</Filter>
     </ClInclude>
     <ClInclude Include="src\Pixie\Timestep.h">
@@ -205,6 +211,9 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
@@ -1523,6 +1532,9 @@
     <ClCompile Include="src\Pixie\Renderer\Texture.cpp">
       <Filter>src\Pixie\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Pixie\Renderer\UniformBuffer.cpp">
+      <Filter>src\Pixie\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Pixie\Renderer\VertexArray.cpp">
       <Filter>src\Pixie\Renderer</Filter>
     </ClCompile>
@@ -1563,6 +1575,9 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">

@@ -43,11 +43,23 @@ namespace Pixie
 	private:
 		std::string ReadFile(const std::string& filepath);
 		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
-		void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
 	
+		void CompileOrGetVulkanBinaries(const std::unordered_map<GLenum, std::string>& shaderSources);
+		void CompileOrGetOpenGLBinaries();
+		void CreateProgram();
+		void Reflect(GLenum stage, const std::vector<uint32_t>& shaderData);
+
+		std::string ExtractName(std::string filepath);
+
 	private:
 		uint32_t rendererID;
+		std::string filePath;
 		std::string name;
+
+		std::unordered_map<GLenum /*Stage*/, std::vector<uint32_t>> vulkanSPIRV;
+		std::unordered_map<GLenum /*Stage*/, std::vector<uint32_t>> openGLSPIRV;
+
+		std::unordered_map<GLenum, std::string> openGLSourceCode;
 	};
 
 }

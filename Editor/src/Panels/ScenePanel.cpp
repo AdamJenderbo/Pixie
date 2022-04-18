@@ -79,7 +79,6 @@ namespace Pixie
 		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 		{
 			int pixelData = framebuffer->ReadPixel(1, mouseX, mouseY);
-			Console::Log(std::to_string(pixelData));
 			hoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, scene.get());
 			OnHooverEntity(hoveredEntity);
 		}

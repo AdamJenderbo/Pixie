@@ -27,17 +27,15 @@ namespace Pixie
 
 	void Editor::OnAttach()
 	{
-		//FramebufferSpecification fbSpec;
-		//fbSpec.Attachments = { 
-		//	FramebufferTextureFormat::RGBA8, 
-		//	FramebufferTextureFormat::RED_INTEGER, 
-		//	//FramebufferTextureFormat::Depth
-		//};
-		//fbSpec.Width = 1280;
-		//fbSpec.Height = 720;
-		//framebuffer = Framebuffer::Create(fbSpec);
-
 		SetActiveScene(std::make_shared<Scene>());
+
+		auto commandLineArgs = Application::Get().GetCommandLineArgs();
+		if (commandLineArgs.Count > 1)
+		{
+			auto sceneFilePath = commandLineArgs[1];
+			SceneSerializer serializer(activeScene);
+			serializer.Deserialize(sceneFilePath);
+		}
 
 		scenePanel.SetOnHooverEntity(PX_BIND_EVENT_FN(Editor::OnHooverEntity));
 		scenePanel.SetOnClickEntity(PX_BIND_EVENT_FN(Editor::OnClickEntity));
@@ -212,39 +210,10 @@ namespace Pixie
 		if (!filepath.empty())
 		{
 			SetActiveScene(std::make_shared<Scene>());
-			activeScene->OnViewportResize((uint32_t)scenePanel.GetViewportSize().x, (uint32_t)scenePanel.GetViewportSize().y);
+			activeScene->OnViewportResize((uint32_t)scenePanel.GetViewportSize().x, (uint32_t)scenePanel.GetViewportSize().x);
 
 			SceneSerializer serializer(activeScene);
-
 			serializer.Deserialize(filepath);
-			class CameraController : public ScriptableEntity
-			{
-			public:
-				virtual void OnCreate() override
-				{
-				}
-
-				virtual void OnDestroy() override
-				{
-				}
-
-				virtual void OnUpdate(Timestep ts) override
-				{
-					auto& translation = GetComponent<TransformComponent>().Translation;
-					float speed = 5.0f;
-
-					if (Input::IsKeyPressed(Key::Left))
-						translation.x -= speed * ts;
-					if (Input::IsKeyPressed(Key::Right))
-						translation.x += speed * ts;
-					if (Input::IsKeyPressed(Key::Up))
-						translation.y += speed * ts;
-					if (Input::IsKeyPressed(Key::Down))
-						translation.y -= speed * ts;
-				}
-			};
-
-			activeScene->GetMainCameraEntity().AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		}
 	}
 
