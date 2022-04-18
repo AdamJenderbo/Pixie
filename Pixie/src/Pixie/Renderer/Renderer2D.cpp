@@ -312,6 +312,9 @@ namespace Pixie
 	}
 	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& spriteRenderer, int entityID)
 	{
-		DrawQuad(transform, spriteRenderer.Color, entityID);
+		if (spriteRenderer.Texture)
+			DrawQuad(transform, spriteRenderer.Texture, spriteRenderer.TilingFactor, spriteRenderer.Color, entityID);
+		else
+			DrawQuad(transform, spriteRenderer.Color, entityID);
 	}
 }

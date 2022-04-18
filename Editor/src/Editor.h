@@ -1,11 +1,9 @@
 #pragma once
-
 #include "Pixie.h"
-#include "Panels/ScenePanel.h"
-#include "Panels/SceneHierarchyPanel.h"
-#include "Panels/InspectorPanel.h"
+#include "Pixie/Scene/Entity.h"
+#include "Pixie/Renderer/Framebuffer.h"
+#include "Panels/HierarchyPanel.h"
 #include "Panels/ContentBrowserPanel.h"
-#include "Panels/StatsPanel.h"
 
 namespace Pixie
 {
@@ -20,31 +18,31 @@ namespace Pixie
 
 		void OnUpdate(Timestep ts) override;
 		virtual void OnImGuiRender() override;
-
-		void OnEvent(Event& e) override;
-
-		void OnSelectEntity(Entity entity);
-		void OnHooverEntity(Entity entity);
-		void OnClickEntity(Entity entity);
-
+		void OnEvent(Event & e) override;
 	private:
-		bool OnKeyPressed(KeyPressedEvent& e);
+		bool OnKeyPressed(KeyPressedEvent & e);
+		bool OnMouseButtonPressed(MouseButtonPressedEvent & e);
 
 		void NewScene();
 		void OpenScene();
+		void OpenScene(const std::filesystem::path & path);
 		void SaveSceneAs();
-
-		void SetActiveScene(Ref<Scene>& scene);
-
 	private:
+		Ref<Scene> scene;
+		EditorCamera editorCamera;
+		Ref<Framebuffer> framebuffer;
 
-		Ref<Scene> activeScene;
+		bool viewportFocused = false, viewportHovered = false;
+		glm::vec2 viewportSize = { 0.0f, 0.0f };
+		glm::vec2 viewportBounds[2];
+
+		Entity hoveredEntity;
+
+		int gizmoType = -1;
 
 		// Panels
-		ScenePanel scenePanel;
-		SceneHierarchyPanel hierarchyPanel;
-		InspectorPanel inspectorPanel;
+		HierarchyPanel hierarchyPanel;
 		ContentBrowserPanel contentBrowserPanel;
-		StatsPanel statsPanel;
+
 	};
 }
